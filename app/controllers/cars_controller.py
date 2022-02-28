@@ -12,7 +12,7 @@ from app.configs.database import db
 
 load_dotenv()
 
-attributes = json.loads(os.getenv('ATTRIBUTES'))
+attributes = json.loads(os.getenv('ATTRIBUTES_CAR'))
 
 def create_car():
     data = request.get_json()

@@ -35,29 +35,23 @@ def create_car():
     exceptions_keys_data = ['current_km', 'daily_rental_price', 'daily_fixed_km' ]
 
     for attribute in data.items():
-        print(attribute)
-
 
         if attribute[0] not in exceptions_keys_data:
             if type(attribute[1]) != str:
-                print('1',attribute[0])
                 return {'Error': f'{attribute[0]} must be a string'}, HTTPStatus.BAD_REQUEST
         else:
             if attribute[0] == 'daily_rental_price':
                 if type(attribute[1]) != float:
-                    print('2',attribute[0])
                     return {'Error': f'{attribute[0]} must be a float number'}, HTTPStatus.BAD_REQUEST
             else:
                 if type(attribute[1]) != int:
-                    print('3',attribute[0])
                     return {'Error': f'{attribute[0]} must be a int number'}, HTTPStatus.BAD_REQUEST
 
     try:
         db.session.add(car)
         db.session.commit()
     except IntegrityError:
-        print(IntegrityError)
-        return {'Error': 'Email or Phone already registered'}, HTTPStatus.CONFLICT
+        return {'Error': 'chassi or license_plate already registered'}, HTTPStatus.CONFLICT
 
     
     return jsonify(car), HTTPStatus.CREATED

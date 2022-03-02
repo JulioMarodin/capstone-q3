@@ -1,1 +1,1 @@
-web: gunicorn "app:create_app()"
+echo "web: gunicorn app:app" > Procfile

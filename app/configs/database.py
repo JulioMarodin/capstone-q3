@@ -14,9 +14,10 @@ def init_app(app: Flask):
     db.init_app(app)
     app.db = db
 
-    from app.models.users_models import Users
 
     db.create_all(app=app)
     app.db = db
 
+    from app.models.users_models import Users
     from app.models.cars_models import Cars
+    from app.models.address_models import Address

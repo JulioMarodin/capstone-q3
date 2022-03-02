@@ -33,10 +33,3 @@ class Cars(db.Model):
     licensing_expiration = Column(DateTime, nullable=False)
     daily_rental_price = Column(Float, nullable=False)
     daily_fixed_km = Column(Integer, nullable=False)
-
-    # ## 15 jan a 10 fev -> 176kwh
-
-    # 0 - 30 = 0,95 * 30 = 28,50 * 0,35 = 9,975
-    # 31 - 100 = 0,95 * 70 = 66,5 * 0,6 = 39,90
-    # 101 - 220 = 0,95 * 76 = 72,20 * 0,9 = 64,98
-    # 0,95 * 20 = 19 * 0,9 = 17,10

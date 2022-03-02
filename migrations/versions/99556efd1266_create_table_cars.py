@@ -1,8 +1,8 @@
 """create table cars
 
-Revision ID: 5010c586af5b
+Revision ID: 99556efd1266
 Revises: 
-Create Date: 2022-02-28 16:54:48.102929
+Create Date: 2022-03-01 23:31:00.516199
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '5010c586af5b'
+revision = '99556efd1266'
 down_revision = None
 branch_labels = None
 depends_on = None

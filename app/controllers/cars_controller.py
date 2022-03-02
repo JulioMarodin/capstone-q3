@@ -120,7 +120,7 @@ def remove_car(chassi):
 
 def search_car(license_plate):
 
-    license_plate_upper = license_plate.upper()
+    license_plate_upper = license_plate.upper() 
 
     cars_search = Cars.query.filter(Cars.license_plate.like(f'%{license_plate_upper}%'))
 

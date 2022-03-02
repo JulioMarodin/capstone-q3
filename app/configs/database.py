@@ -14,7 +14,5 @@ def init_app(app: Flask):
     db.init_app(app)
     app.db = db
 
-    
-    # db.create_all(app=app)
-    # app.db = db
 
+    

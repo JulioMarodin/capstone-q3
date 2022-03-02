@@ -10,4 +10,4 @@ def create_app():
     migrations.init_app(app)
     routes.init_app(app)
 
-    return app
+    return app 

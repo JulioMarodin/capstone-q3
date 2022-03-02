@@ -12,4 +12,4 @@ def init_app(app: Flask):
     bp_api.register_blueprint(bp_cars)
     bp_api.register_blueprint(bp_address)
 
-    app.register_blueprint(bp_api)
+    app.register_blueprint(bp_api) 

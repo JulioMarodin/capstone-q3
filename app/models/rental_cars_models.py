@@ -6,8 +6,8 @@ from app.configs.database import db
 
 
 @dataclass
-class Cars(db.Model):
-    rental_id: int
+class RentalCars(db.Model):
+    rental_id: str
     rental_date: date
     rental_return_date: date
     rental_real_return_date: date
@@ -20,8 +20,8 @@ class Cars(db.Model):
     total_returned_km: float
     rental_value: float
     rental_real_value: float
-    customer_id: int
-    cars_id: int
+    customer_cnh: int
+    cars_license_plate: str
 
     __tablename__ = 'tb_rental_cars'
 
@@ -36,7 +36,7 @@ class Cars(db.Model):
     final_km = Column(Float, nullable=False)
     total_fixed_km = Column(Integer, nullable=False)
     total_returned_km = Column(Float)
-    rental_value: Column(Float, nullable=False)
+    rental_value = Column(Float, nullable=False)
     rental_real_value = Column(Float)
-    customer_cnh = Column(Integer, ForeignKey('tb_users.cnh') ,nullable=False)
-    cars_license_plate = Column(Integer, ForeignKey('tb_cars.license_plate') ,nullable=False)
+    customer_cnh = Column(String, ForeignKey('tb_users.cnh') ,nullable=False)
+    cars_license_plate = Column(String, ForeignKey('tb_cars.license_plate') ,nullable=False)

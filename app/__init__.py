@@ -1,7 +1,6 @@
 from flask import Flask
 from app.configs import database, migrations
 from app import routes
-import os
 
 
 
@@ -9,8 +8,7 @@ def create_app():
     app = Flask(__name__)
 
     app.config['JSON_SORT_KEYS'] = False
-
-    app.run(debug=True)
+    
 
     database.init_app(app)
     migrations.init_app(app)

@@ -22,6 +22,10 @@ def create_car():
     except TypeError as e:
         return {'Error': 'Type error bad request'}, HTTPStatus.BAD_REQUEST
 
+    if len(data.get('chassi')) != 17:
+        return {'Error': f'Chassis field must be 17 characters long'}, HTTPStatus.BAD_REQUEST
+
+
     missing_keys = []
 
     for attribute in attributes:
@@ -67,7 +71,7 @@ def get_all_cars():
         return {'Error': 'No data found'}, HTTPStatus.NOT_FOUND
     
     if not record_all_cars:
-        return {'Error': f'Records not found'}, HTTPStatus.NOT_FOUND
+        return {'Error': 'Records not found'}, HTTPStatus.NOT_FOUND
 
     return jsonify(record_all_cars), HTTPStatus.OK
 
@@ -105,10 +109,8 @@ def remove_car(chassi):
     
     car_delete = Cars.query.filter_by(chassi=chassi)
 
-    print('1', car_delete)
-    print('2', car_delete.all())
 
-    if len(car_delete.all()) == 0:
+    if not car_delete.all():
         return {'Error': f'Records not found'}, HTTPStatus.NOT_FOUND
 
     car_delete.delete()
@@ -124,9 +126,13 @@ def search_car(license_plate):
 
     cars_search = Cars.query.filter(Cars.license_plate.like(f'%{license_plate_upper}%'))
 
+    print(cars_search)
+    print(cars_search.all())
+
+    if not cars_search.all():
+        return {'Error': f'Records not found'}, HTTPStatus.NOT_FOUND
+        
+
     car_search = cars_search.all()
     
-
     return jsonify(car_search), HTTPStatus.OK
-
-    ...

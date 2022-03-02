@@ -1,5 +1,5 @@
 from dotenv import load_dotenv
-from flask import request, jsonify
+from flask import current_app, request, jsonify
 import os
 import json
 from http import HTTPStatus
@@ -22,6 +22,10 @@ def create_car():
     except TypeError as e:
         return {'Error': 'Type error bad request'}, HTTPStatus.BAD_REQUEST
 
+    if len(data.get('chassi')) != 17:
+        return {'Error': f'Chassis field must be 17 characters long'}, HTTPStatus.BAD_REQUEST
+
+
     missing_keys = []
 
     for attribute in attributes:
@@ -32,7 +36,7 @@ def create_car():
         return {'Error': f'Missing Keys: {missing_keys}'}, HTTPStatus.BAD_REQUEST
 
 
-    exceptions_keys_data = ['current_km', 'daily_rental_price', 'daily_fixed_km' ]
+    exceptions_keys_data = ['current_km', 'daily_rental_price', 'daily_fixed_km']
 
     for attribute in data.items():
 
@@ -40,12 +44,12 @@ def create_car():
             if type(attribute[1]) != str:
                 return {'Error': f'{attribute[0]} must be a string'}, HTTPStatus.BAD_REQUEST
         else:
-            if attribute[0] == 'daily_rental_price':
-                if type(attribute[1]) != float:
-                    return {'Error': f'{attribute[0]} must be a float number'}, HTTPStatus.BAD_REQUEST
-            else:
+            if attribute[0] == 'daily_fixed_km':
                 if type(attribute[1]) != int:
                     return {'Error': f'{attribute[0]} must be a int number'}, HTTPStatus.BAD_REQUEST
+            else:
+                if type(attribute[1]) != float:
+                    return {'Error': f'{attribute[0]} must be a float number'}, HTTPStatus.BAD_REQUEST
 
     try:
         db.session.add(car)
@@ -56,3 +60,79 @@ def create_car():
     
     return jsonify(car), HTTPStatus.CREATED
     
+
+
+def get_all_cars():
+    session: Session = db.session
+    base_query = session.query(Cars)
+    record_all_cars = base_query.all()
+
+    if not record_all_cars:
+        return {'Error': 'No data found'}, HTTPStatus.NOT_FOUND
+    
+    if not record_all_cars:
+        return {'Error': 'Records not found'}, HTTPStatus.NOT_FOUND
+
+    return jsonify(record_all_cars), HTTPStatus.OK
+
+
+def update_car(chassi):
+    data = request.get_json()
+
+    if len(chassi) != 17:
+            return {'Error': f'Chassis field must be 17 characters long'}, HTTPStatus.BAD_REQUEST
+
+
+    car_update = Cars.query.get(chassi)
+
+    print(car_update)
+
+    if not car_update:
+        return {'Error': f'Records not found'}, HTTPStatus.NOT_FOUND
+
+    for key, value in data.items():
+        setattr(car_update, key, value)
+
+
+    current_app.db.session.add(car_update)
+    current_app.db.session.commit()
+
+
+    return "", HTTPStatus.NO_CONTENT
+
+
+def remove_car(chassi):
+    data = request.get_json()
+
+    if len(chassi) != 17:
+        return {'Error': f'Chassis field must be 17 characters long'}, HTTPStatus.BAD_REQUEST
+    
+    car_delete = Cars.query.filter_by(chassi=chassi)
+
+
+    if not car_delete.all():
+        return {'Error': f'Records not found'}, HTTPStatus.NOT_FOUND
+
+    car_delete.delete()
+    current_app.db.session.commit()
+
+    return "", HTTPStatus.NO_CONTENT
+
+
+
+def search_car(license_plate):
+
+    license_plate_upper = license_plate.upper() 
+
+    cars_search = Cars.query.filter(Cars.license_plate.like(f'%{license_plate_upper}%'))
+
+    print(cars_search)
+    print(cars_search.all())
+
+    if not cars_search.all():
+        return {'Error': f'Records not found'}, HTTPStatus.NOT_FOUND
+        
+
+    car_search = cars_search.all()
+    
+    return jsonify(car_search), HTTPStatus.OK

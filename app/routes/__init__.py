@@ -9,4 +9,4 @@ def init_app(app: Flask):
     bp_api.register_blueprint(bp_users)
     bp_api.register_blueprint(bp_cars)
 
-    app.register_blueprint(bp_api)
+    app.register_blueprint(bp_api) 

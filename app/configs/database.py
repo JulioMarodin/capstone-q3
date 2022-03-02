@@ -20,3 +20,5 @@ def init_app(app: Flask):
     app.db = db
 
     from app.models.cars_models import Cars
+
+    from app.models.maintenca_car_models import Maintenance

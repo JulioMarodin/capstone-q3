@@ -39,4 +39,4 @@ class RentalCars(db.Model):
     rental_value = Column(Float, nullable=False)
     rental_real_value = Column(Float)
     customer_cnh = Column(String, ForeignKey('tb_users.cnh') ,nullable=False)
-    cars_license_plate = Column(String, ForeignKey('tb_cars.license_plate') ,nullable=False)
+    car_license_plate = Column(String, ForeignKey('tb_cars.license_plate') ,nullable=False)

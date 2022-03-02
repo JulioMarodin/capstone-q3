@@ -10,6 +10,8 @@ def create_app():
 
     app.config['JSON_SORT_KEYS'] = False
 
+    app.run(debug=True)
+
     database.init_app(app)
     migrations.init_app(app)
     routes.init_app(app)

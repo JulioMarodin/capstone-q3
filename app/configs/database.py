@@ -1,13 +1,13 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-import os
+from os import getenv
 
 db = SQLAlchemy()
 
 
 def init_app(app: Flask):
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('SQLALCHEMY_DATABASE_URI')
+    app.config['SQLALCHEMY_DATABASE_URI'] = getenv('SQLALCHEMY_DATABASE_URI')
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['JSON_SORT_KEYS'] = False
 
@@ -17,3 +17,6 @@ def init_app(app: Flask):
     from app.models.users_models import Users
 
     db.create_all(app=app)
+    app.db = db
+
+    from app.models.cars_models import Cars

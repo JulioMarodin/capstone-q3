@@ -10,9 +10,6 @@ def create_app():
 
     app.config['JSON_SORT_KEYS'] = False
 
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
-
     database.init_app(app)
     migrations.init_app(app)
     routes.init_app(app)

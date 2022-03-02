@@ -84,3 +84,12 @@ def delete_user(cnh):
     current_app.db.session.commit()
 
     return '', 200
+
+def get_a_user(cnh):
+
+    get_car = Users.query.filter(Users.cnh.like(f'%{cnh.lower()}%'))
+
+    car_search = get_car.all()
+    
+
+    return jsonify(car_search), HTTPStatus.OK

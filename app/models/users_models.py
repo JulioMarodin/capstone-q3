@@ -5,7 +5,6 @@ from sqlalchemy import Column, String
 from app.configs.database import db
 
 @dataclass
-
 class Users(db.Model):
     cnh: str
     cpf: str

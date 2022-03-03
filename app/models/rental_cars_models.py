@@ -21,7 +21,7 @@ class RentalCars(db.Model):
     rental_value: float
     rental_real_value: float
     customer_cnh: int
-    cars_license_plate: str
+    car_license_plate: str
 
     __tablename__ = 'tb_rental_cars'
 

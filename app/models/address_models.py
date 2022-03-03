@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
 
 from app.configs.database import db
 
@@ -13,6 +14,7 @@ class Address(db.Model):
     residence_city: str
     residence_state: str
     residence_reference: str
+    address: str
 
     __tablename__ = 'tb_address'
 
@@ -23,4 +25,6 @@ class Address(db.Model):
     residence_cep = Column(String(8), nullable=False)
     residence_city = Column(String, nullable=False)
     residence_state = Column(String, nullable=False)
-    residence_reference = Column(String, nullable=False)  
+    residence_reference = Column(String, nullable=False)
+
+    address = relationship("Users", back_populates="user_address", uselist=False)

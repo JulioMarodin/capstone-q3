@@ -5,6 +5,7 @@ def init_app(app: Flask):
     from app.models.users_models import Users
     from app.models.rental_cars_models import RentalCars
     from app.models.cars_models import Cars
+    from app.models.address_models import Address
 
     Migrate(
         app,

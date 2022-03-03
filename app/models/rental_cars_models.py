@@ -21,7 +21,7 @@ class RentalCars(db.Model):
     rental_value: float
     rental_real_value: float
     customer_cnh: int
-    cars_license_plate: str
+    car_license_plate: str
 
     __tablename__ = 'tb_rental_cars'
 
@@ -31,12 +31,12 @@ class RentalCars(db.Model):
     rental_real_return_date = Column(DateTime)
     returned_car = Column(Boolean)
     rental_total_days = Column(Integer, nullable=False)
-    rental_real_total_days = Column(Integer, nullable=False)
+    rental_real_total_days = Column(Integer)
     initial_km = Column(Float, nullable=False)
-    final_km = Column(Float, nullable=False)
+    final_km = Column(Float)
     total_fixed_km = Column(Integer, nullable=False)
     total_returned_km = Column(Float)
     rental_value = Column(Float, nullable=False)
     rental_real_value = Column(Float)
     customer_cnh = Column(String, ForeignKey('tb_users.cnh') ,nullable=False)
-    cars_license_plate = Column(String, ForeignKey('tb_cars.license_plate') ,nullable=False)
+    car_license_plate = Column(String, ForeignKey('tb_cars.license_plate') ,nullable=False)

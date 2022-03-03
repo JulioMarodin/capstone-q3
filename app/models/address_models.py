@@ -1,7 +1,9 @@
 from dataclasses import dataclass
 from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 
 from app.configs.database import db
+
 
 @dataclass
 class Address(db.Model):
@@ -24,3 +26,6 @@ class Address(db.Model):
     reference = Column(String, nullable=False)  
     state_id = Column(Integer, ForeignKey("tb_states.state_id"), nullable=False)
     
+
+
+    address = relationship("Users", back_populates="user_address", uselist=False)

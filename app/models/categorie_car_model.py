@@ -4,6 +4,8 @@ from app.configs.database import db
 
 @dataclass
 class Categorie_car(db.Model):
+    keys = ["body_types", "fuel_type", "engine_power", "km_per_liter", "allowed_categorie_cnh", "differentials"]
+
     categorie_id: int
     body_types: str
     fuel_type: str

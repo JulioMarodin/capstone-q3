@@ -1,26 +1,26 @@
 from dataclasses import dataclass
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 
 from app.configs.database import db
 
 @dataclass
 class Address(db.Model):
     address_id: int
-    residence_street: str
-    residence_number: str
-    residence_district: str
-    residence_cep: str
-    residence_city: str
-    residence_state: str
-    residence_reference: str
+    street: str
+    number: str
+    district: str
+    zip_code: str
+    city: str
+    reference: str
 
     __tablename__ = 'tb_address'
 
     address_id = Column(Integer, primary_key=True)
-    residence_street = Column(String, nullable=False)
-    residence_number = Column(String, nullable=False)
-    residence_district = Column(String, nullable=False)
-    residence_cep = Column(String(8), nullable=False)
-    residence_city = Column(String, nullable=False)
-    residence_state = Column(String, nullable=False)
-    residence_reference = Column(String, nullable=False)  
+    street = Column(String, nullable=False)
+    number = Column(String, nullable=False)
+    district = Column(String, nullable=False)
+    zip_code = Column(String(8), nullable=False)
+    city = Column(String, nullable=False)
+    reference = Column(String, nullable=False)  
+    state_id = Column(Integer, ForeignKey("tb_states.state_id"), nullable=False)
+    

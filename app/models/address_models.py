@@ -14,6 +14,7 @@ class Address(db.Model):
     zip_code: str
     city: str
     reference: str
+    state_id: int
 
     __tablename__ = 'tb_address'
 

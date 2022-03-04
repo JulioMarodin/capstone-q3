@@ -6,6 +6,8 @@ from app.configs.database import db
 
 @dataclass
 class Maintenance(db.Model):
+    keys = ["last_maintenance", "next_maintenance", "repaired_items", "maintenance_price"]
+    
     maintenance_id : Integer
     last_maintenance : date
     next_maintenance : date
@@ -19,4 +21,3 @@ class Maintenance(db.Model):
     next_maintenance = Column(DateTime, nullable=False)
     repaired_items = Column(String, nullable=False)
     maintenance_price = Column(Float, nullable=False)
-

@@ -24,13 +24,12 @@ def create_user():
 
     data = request.get_json()
 
-    #modificação para pegar o id do endereço para salvar na tabela de usuários
     address = data.pop("address")
     
-    returned_address = create_address(address) ## recebe o address_id vindo da tabela tb_address
+    returned_address = create_address(address)
     try:
         user = Users(**data)
-        user.id_address = returned_address[0]["id"]
+        user.id_address = returned_address["id"]
         
     except TypeError as e:
         return {'Error':'Type error'}, HTTPStatus.BAD_REQUEST
@@ -121,22 +120,27 @@ def delete_user(cnh):
 def get_a_user(cnh):
 
     get_user = Users.query.get(cnh)
-    db_state = States.query.filter_by(state_id= get_user.user_address[0].state_id).one()
-    
-    user_address_keys = ["address_id", "street", "number", "district", "zip_code", "city", "reference", "state"]
-    user_address_values = [get_user.user_address[0].address_id,get_user.user_address[0].street, get_user.user_address[0].number, get_user.user_address[0].district, get_user.user_address[0].zip_code, get_user.user_address[0].city, get_user.user_address[0].reference, db_state.name]
-    
-    user_address_response = dict(zip(user_address_keys, user_address_values))
-    
-    print(get_user.cnh)
 
-    keys = ["cnh", "cpf", "name", "email", "phone", "categorie_cnh", "user_address"]
-    values = [get_user.cnh, get_user.cpf, get_user.name, get_user.email, get_user.phone, get_user.categorie_cnh, user_address_response]
+    try:
 
-    response = dict(zip(keys, values))
-    print(response)
+        db_state = States.query.filter_by(state_id= get_user.user_address[0].state_id).one()
+        
+        user_address_keys = ["address_id", "street", "number", "district", "zip_code", "city", "reference", "state"]
+        user_address_values = [get_user.user_address[0].address_id,get_user.user_address[0].street, get_user.user_address[0].number, get_user.user_address[0].district, get_user.user_address[0].zip_code, get_user.user_address[0].city, get_user.user_address[0].reference, db_state.name]
+        
+        user_address_response = dict(zip(user_address_keys, user_address_values))
+        
+        print(get_user.cnh)
 
-    if not get_user:
+        keys = ["cnh", "cpf", "name", "email", "phone", "categorie_cnh", "user_address"]
+        values = [get_user.cnh, get_user.cpf, get_user.name, get_user.email, get_user.phone, get_user.categorie_cnh, user_address_response]
+
+        response = dict(zip(keys, values))
+        print(response)
+
+
+        return jsonify(response), HTTPStatus.OK
+    except AttributeError:
         return {'error': f'user cnh {cnh} not found'}, HTTPStatus.NOT_FOUND
     
-    return jsonify(response), HTTPStatus.OK
+    

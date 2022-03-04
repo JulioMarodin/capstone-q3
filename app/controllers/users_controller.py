@@ -27,12 +27,13 @@ def create_user():
     address = data.pop("address")
     
     returned_address = create_address(address)
+    
     try:
         user = Users(**data)
         user.id_address = returned_address["id"]
         
     except TypeError as e:
-        return {'Error':'CNH, CPF, email or phone already registered'}, HTTPStatus.BAD_REQUEST
+        return {'Error':'Type error bad request'}, HTTPStatus.BAD_REQUEST
 
     missing_keys = []
 
@@ -49,16 +50,26 @@ def create_user():
     
     try:
         
-        print(user)
+        
         db.session.add(user)
         db.session.commit()
-        
+
+        completed_address = []
+        completed_address.append(returned_address)
+
+        user_keys = ["cnh", "cpf", "name", "email", "phone", "categorie_cnh", "user_address"]
+        user_values = [user.cnh, user.cpf, user.name, user.email, user.phone, user.categorie_cnh, completed_address]
+
+        print("#"*150)
+        response = dict(zip(user_keys, user_values))
+        print(response)
+        print("#"*150)
        
     except IntegrityError:
-        return {'Error': 'CPF or email already registered'}, HTTPStatus.CONFLICT
+        return {'Error': 'CNH, CPF, email or phone already registered'}, HTTPStatus.CONFLICT
     
 
-    return jsonify(user), HTTPStatus.CREATED
+    return jsonify(response), HTTPStatus.CREATED
 
 
 def get_users():
@@ -71,9 +82,11 @@ def get_users():
         user_address_values = [user.user_address[0].address_id,user.user_address[0].street, user.user_address[0].number, user.user_address[0].district, user.user_address[0].zip_code, user.user_address[0].city, user.user_address[0].reference, db_state.name]
 
         user_address_response = dict(zip(user_address_keys, user_address_values))
+        completed_address = []
+        completed_address.append(user_address_response)
 
         keys = ["cnh", "cpf", "name", "email", "phone", "categorie_cnh", "user_address"]
-        values = [user.cnh, user.cpf, user.name, user.email, user.phone, user.categorie_cnh, user_address_response]
+        values = [user.cnh, user.cpf, user.name, user.email, user.phone, user.categorie_cnh, completed_address]
         response = dict(zip(keys, values))
         all_users.append(response)
     

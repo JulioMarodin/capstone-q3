@@ -70,4 +70,4 @@ def create_address(received_address):
     r = address[0]
     values = [r.address_id, r.street, r.number, r.district, r.zip_code, r.city, r.reference, state_name]
     response = dict(zip(keys, values))
-    return response, HTTPStatus.OK
+    return response

@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from sqlalchemy import Column, Integer, String, Float, DateTime
+from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean
 from datetime import date
 
 from app.configs.database import db
@@ -18,6 +18,7 @@ class Cars(db.Model):
     licensing_expiration: date
     daily_rental_price: float
     daily_fixed_km: int
+    available: bool
 
     __tablename__ = 'tb_cars'
 
@@ -32,3 +33,4 @@ class Cars(db.Model):
     licensing_expiration = Column(DateTime, nullable=False)
     daily_rental_price = Column(Float, nullable=False)
     daily_fixed_km = Column(Integer, nullable=False)
+    available = Column(Boolean, default=True)

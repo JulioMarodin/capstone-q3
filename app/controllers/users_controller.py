@@ -3,7 +3,6 @@ from dotenv import load_dotenv
 from http import HTTPStatus
 import os, json
 
-from marshmallow import missing
 
 from app.models.users_models import Users
 
@@ -16,6 +15,7 @@ from werkzeug.exceptions import NotFound
 from app.models.users_models import Users
 
 load_dotenv()
+
 attributes = json.loads(os.getenv('ATTRIBUTES_USER'))
 
 def create_user():
@@ -53,6 +53,9 @@ def create_user():
 def get_users():
     users = (Users.query.all())
 
+    if not users:
+        return {'error': 'users not found'}, HTTPStatus.NOT_FOUND
+
     return jsonify(users), HTTPStatus.OK
 
 
@@ -68,28 +71,32 @@ def patch_users(cnh):
     current_app.db.session.add(user)
     current_app.db.session.commit()
 
-    return {
+    data = {
         "email": user.email,
         "phone": user.phone,
         "categorie_cnh": user.categorie_cnh
-    }, 204
+    }
 
-    #editar a resposta
+    return jsonify(data), HTTPStatus.OK
 
 
 def delete_user(cnh):
-    query = Users.query.get(cnh)
+    user = Users.query.get(cnh)
 
-    current_app.db.session.delete(query)
-    current_app.db.session.commit()
+    try:
+        current_app.db.session.delete(user)
+        current_app.db.session.commit()
+    except NotFound:
+        return {'error': f'user cnh {cnh} not found'}, HTTPStatus.NOT_FOUND
 
-    return '', 200
+    return {'message': f'user cnh {cnh} deleted'}, HTTPStatus.OK
+
 
 def get_a_user(cnh):
 
-    get_car = Users.query.filter(Users.cnh.like(f'%{cnh.lower()}%'))
+    get_user = Users.query.get(cnh)
 
-    car_search = get_car.all()
+    if not get_user:
+        return {'error': f'user cnh {cnh} not found'}, HTTPStatus.NOT_FOUND
     
-
-    return jsonify(car_search), HTTPStatus.OK
+    return jsonify(get_user), HTTPStatus.OK

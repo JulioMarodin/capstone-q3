@@ -32,7 +32,7 @@ def create_user():
         user.id_address = returned_address["id"]
         
     except TypeError as e:
-        return {'Error':'Type error'}, HTTPStatus.BAD_REQUEST
+        return {'Error':'CNH, CPF, email or phone already registered'}, HTTPStatus.BAD_REQUEST
 
     missing_keys = []
 

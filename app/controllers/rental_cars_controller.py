@@ -17,8 +17,8 @@ def rent_car():
         data = request.get_json()
         keys = RentalCars.create_keys
 
-        filter_keys(data, keys)
-        missing_key(data, keys)
+        filter_keys(data.keys(), keys)
+        missing_key(data.keys(), keys)
 
         car_to_be_rented = Cars.query.filter_by(license_plate=data['car_license_plate']).first_or_404()
         is_cnh_in_database = Users.query.filter_by(cnh=data['customer_cnh']).first_or_404()
@@ -65,8 +65,8 @@ def return_car():
 
         keys = RentalCars.return_keys
 
-        filter_keys(data, keys)
-        missing_key(data, keys)
+        filter_keys(data.keys(), keys)
+        missing_key(data.keys(), keys)
         
         car_to_be_returned = Cars.query.filter_by(license_plate=data['car_license_plate'].upper()).first_or_404()
         is_cnh_in_database = Users.query.filter_by(cnh=data['cnh']).first_or_404()

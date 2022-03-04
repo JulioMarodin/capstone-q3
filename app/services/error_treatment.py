@@ -1,5 +1,6 @@
 from app.exception.missing_key import MissingKeyError
-
+from app.exception.invalid_date import InvalidDateError
+from datetime import datetime
 
 def filter_keys(incoming_keys, right_keys):
 	wrong_keys = list(incoming_keys - right_keys)
@@ -20,3 +21,18 @@ def missing_key(incoming_keys, right_keys):
 				"missing_key": missing_key
 			}
 		)
+
+def validate_date(*args):
+	data = list(args)
+
+	for item in data:
+		if type(item) is str:
+			try:
+				datetime.strptime(item, '%d/%m/%Y')
+
+			except:
+				raise InvalidDateError(
+					{
+						"invalid_date": item
+					}
+				)

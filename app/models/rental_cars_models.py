@@ -7,6 +7,9 @@ from app.configs.database import db
 
 @dataclass
 class RentalCars(db.Model):
+    create_keys = ['rental_date', 'rental_return_date', 'customer_cnh', 'car_license_plate']
+    return_keys = ['rental_real_return_date', 'rental_real_total_days', 'total_returned_km']
+
     rental_id: str
     rental_date: date
     rental_return_date: date

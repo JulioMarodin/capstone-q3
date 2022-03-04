@@ -7,23 +7,18 @@ from werkzeug.exceptions import NotFound
 from app.models.rental_cars_models import RentalCars
 from app.models.cars_models import Cars
 from app.models.users_models import Users
+from app.services.error_treatment import filter_keys, missing_key
 
 def rent_car():
     try:
         load_dotenv()
 
         km_per_day = json.loads(os.getenv('KM_PER_DAY'))
-        attributes = ['rental_date', 'rental_return_date', 'customer_cnh', 'car_license_plate']
-
         data = request.get_json()
-        missing_keys = []
+        keys = RentalCars.create_keys
 
-        for attribute in attributes:
-            if attribute not in data:
-                missing_keys.append(attribute)
-        
-        if len(missing_keys) > 0:
-            return {'Error': f'Missing keys: {missing_keys}'}
+        filter_keys(data, keys)
+        missing_key(data, keys)
 
         car_to_be_rented = Cars.query.filter_by(license_plate=data['car_license_plate']).first_or_404()
         is_cnh_in_database = Users.query.filter_by(cnh=data['customer_cnh']).first_or_404()
@@ -66,18 +61,12 @@ def return_car():
         km_per_day = json.loads(os.getenv('KM_PER_DAY'))
         km_after_limit = json.loads(os.getenv('PRICE_PER_KM_AFTER_LIMIT'))
         day_after_limit = json.loads(os.getenv('PRICE_PER_DAY_AFTER_LIMIT'))
-
-        attributes = ['rental_real_return_date', 'rental_real_total_days', 'total_returned_km']
-
         data = request.get_json()
-        missing_keys = []
 
-        for attribute in attributes:
-            if attribute not in data:
-                missing_keys.append(attribute)
+        keys = RentalCars.return_keys
 
-        if len(missing_keys) > 0:
-            return {'Error': f'Missing keys: {missing_keys}'}
+        filter_keys(data, keys)
+        missing_key(data, keys)
         
         car_to_be_returned = Cars.query.filter_by(license_plate=data['car_license_plate'].upper()).first_or_404()
         is_cnh_in_database = Users.query.filter_by(cnh=data['cnh']).first_or_404()

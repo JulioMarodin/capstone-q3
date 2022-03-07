@@ -36,3 +36,4 @@ class Cars(db.Model):
     available = Column(Boolean, default=True)
 
     category_id = Column(Integer, ForeignKey('tb_category_car.category_id'), nullable=False)
+    maintenance_id = Column(Integer, ForeignKey('tb_maintenance_car.maintenance_id'),nullable=True)

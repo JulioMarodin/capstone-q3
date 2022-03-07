@@ -111,6 +111,43 @@ def return_car():
         return {'Error': 'Car or cnh not found'}, HTTPStatus.NOT_FOUND
 
 
+def uptade_return_date():
+    keys_to_be_received = ['cnh', 'plate', 'return_date']
+
+    data = request.get_json()
+
+    wrong_keys = []
+    for item in data.keys():
+        if item not in keys_to_be_received:
+            wrong_keys.append(item)
+        if len(wrong_keys) != 0:
+            return {'Error': f'Missing key(s): {wrong_keys}'}, HTTPStatus.BAD_REQUEST
+    
+    if len(data.keys()) != 3:
+        return {'Error': 'This endpoint should receive only the following keys: cnh, plate and return_date'}, HTTPStatus.BAD_REQUEST
+    
+
+    user = Users.query.filter_by(cnh=data['cnh']).first_or_none()
+    car = Cars.query.filter_by(license_plate=data['plate']).first_or_none()
+    invoice = RentalCars.query.filter_by(car_license_plate=data['plate'].upper(),returned_car=False).first_or_none()
+
+    if user == None:
+        return {'Error': 'user not found'}, HTTPStatus.NOT_FOUND
+    
+    if car == None:
+        return {'Error': 'car not found'}, HTTPStatus.NOT_FOUND
+    
+    if invoice == None:
+        return {'Error': 'car available in parking lot'}, HTTPStatus.CONFLICT
+    
+    setattr(invoice, 'return_date', data['return_date'])
+
+    current_app.db.session.add(invoice)
+    current_app.db.session.commit()
+
+    return jsonify(invoice), HTTPStatus.OK
+
+
 def get_all():
     all_invoices = RentalCars.query.all()
 

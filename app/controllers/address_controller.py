@@ -5,25 +5,38 @@ from flask import current_app, request, jsonify
 
 import os
 import json
+from app.controllers.states_controller import create_state
 
 
 from app.models.address_models import Address
 from app.configs.database import db
+from app.models.state_models import States
 
 load_dotenv()
 
 attributes = json.loads(os.getenv("ATTRIBUTES_ADDRESS"))
 
-def create_address():
+
+
+def create_address(received_address):
     session = current_app.db.session()
-    data = request.get_json()
+   
+    data = received_address
+    
+    state_name = data.pop("state")
+    state_id = create_state(state_name)
+    keys = ["id","street", "number", "district", "zip_code", "city", "reference", "state"]
 
     try:
-        address = Address.query.filter_by(residence_street= data["residence_street"]).filter_by(residence_number = data["residence_number"]).filter_by(residence_district=data["residence_district"]).filter_by(residence_cep = data["residence_cep"]).filter_by(residence_city = data["residence_city"]).filter_by(residence_state = data["residence_state"]).filter_by(residence_reference = data["residence_reference"]).all() 
+        address = Address.query.filter_by(street= data["street"]).filter_by(number = data["number"]).filter_by(district=data["district"]).filter_by(zip_code = data["zip_code"]).filter_by(city = data["city"]).filter_by(state_id = state_id).filter_by(reference = data["reference"]).all() 
 
+        
         if len(address)==0:
             try:
                 new_address = Address(**data)
+                new_address.state_id = state_id
+                
+                
             except TypeError:
                 return {"error":"Type error bad request"}, HTTPStatus.BAD_REQUEST
     
@@ -44,24 +57,17 @@ def create_address():
                 session.commit()
         
             except IntegrityError:
-                return {"Error":"Adress already exists"}, HTTPStatus.CONFLICT
+                return {"Error":"Address already exists"}, HTTPStatus.CONFLICT
 
-            return jsonify(new_address), HTTPStatus.CREATED
+            
+            values = [new_address.address_id,new_address.street, new_address.number, new_address.district, new_address.zip_code, new_address.city, new_address.reference, state_name]
+
+            response = dict(zip(keys, values))
+            return response
 
     except:
         ...
-    return {"msg":"Address already exists"}, HTTPStatus.CONFLICT
-
-  
-    
-
-def get_address():
-    data = request.get_json()
-    try:
-        address = Address.query.filter_by(residence_street= data["residence_street"]).filter_by(residence_number = data["residence_number"]).filter_by(residence_district=data["residence_district"]).filter_by(residence_cep = data["residence_cep"]).filter_by(residence_city = data["residence_city"]).filter_by(residence_state = data["residence_state"]).filter_by(residence_reference = data["residence_reference"]).all() 
-        if len(address)==0:
-            address = create_address()
-            return address
-    except:
-        ... 
-    return jsonify(address), HTTPStatus.OK
+    r = address[0]
+    values = [r.address_id, r.street, r.number, r.district, r.zip_code, r.city, r.reference, state_name]
+    response = dict(zip(keys, values))
+    return response, HTTPStatus.OK

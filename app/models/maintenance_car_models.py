@@ -21,3 +21,9 @@ class Maintenance(db.Model):
     next_maintenance = Column(DateTime, nullable=False)
     repaired_items = Column(String, nullable=False)
     maintenance_price = Column(Float, nullable=False)
+
+    @staticmethod
+    def format_date(date):
+        format = date.strftime("%d/%m/%Y")
+
+        return format

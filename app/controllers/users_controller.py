@@ -72,8 +72,8 @@ def get_users():
 
         user_address_response = dict(zip(user_address_keys, user_address_values))
 
-        keys = ["cnh", "cpf", "name", "email", "phone", "categorie_cnh", "user_address"]
-        values = [user.cnh, user.cpf, user.name, user.email, user.phone, user.categorie_cnh, user_address_response]
+        keys = ["cnh", "cpf", "name", "email", "phone", "category_cnh", "user_address"]
+        values = [user.cnh, user.cpf, user.name, user.email, user.phone, user.category_cnh, user_address_response]
         response = dict(zip(keys, values))
         all_users.append(response)
     
@@ -99,7 +99,7 @@ def patch_users(cnh):
     data = {
         "email": user.email,
         "phone": user.phone,
-        "categorie_cnh": user.categorie_cnh
+        "category_cnh": user.category_cnh
     }
 
     return jsonify(data), HTTPStatus.OK
@@ -132,8 +132,8 @@ def get_a_user(cnh):
         
         print(get_user.cnh)
 
-        keys = ["cnh", "cpf", "name", "email", "phone", "categorie_cnh", "user_address"]
-        values = [get_user.cnh, get_user.cpf, get_user.name, get_user.email, get_user.phone, get_user.categorie_cnh, user_address_response]
+        keys = ["cnh", "cpf", "name", "email", "phone", "category_cnh", "user_address"]
+        values = [get_user.cnh, get_user.cpf, get_user.name, get_user.email, get_user.phone, get_user.category_cnh, user_address_response]
 
         response = dict(zip(keys, values))
         print(response)

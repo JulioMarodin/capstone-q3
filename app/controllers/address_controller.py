@@ -22,9 +22,11 @@ def create_address(received_address):
     session = current_app.db.session()
    
     data = received_address
-    
-    state_name = data.pop("state")
-    state_id = create_state(state_name)
+
+    if "state" in data.keys():
+        state_name = data.pop("state")
+        state_id = create_state(state_name)
+
     keys = ["id","street", "number", "district", "zip_code", "city", "reference", "state"]
 
     try:

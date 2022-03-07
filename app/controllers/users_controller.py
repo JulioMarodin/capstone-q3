@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from http import HTTPStatus
 import os, json
 from app.controllers.address_controller import create_address
+from app.models.address_models import Address
 from app.models.state_models import States
 
 
@@ -50,7 +51,6 @@ def create_user():
     
     try:
         
-        
         db.session.add(user)
         db.session.commit()
 
@@ -60,10 +60,9 @@ def create_user():
         user_keys = ["cnh", "cpf", "name", "email", "phone", "categorie_cnh", "user_address"]
         user_values = [user.cnh, user.cpf, user.name, user.email, user.phone, user.categorie_cnh, completed_address]
 
-        print("#"*150)
+        
         response = dict(zip(user_keys, user_values))
-        print(response)
-        print("#"*150)
+        
        
     except IntegrityError:
         return {'Error': 'CNH, CPF, email or phone already registered'}, HTTPStatus.CONFLICT
@@ -101,21 +100,85 @@ def patch_users(cnh):
     
     data = request.get_json()
     user = Users.query.get(cnh)
+    not_changed_keys = ["cnh", "cpf"]
+    for keys in not_changed_keys:
+        if keys in data.keys():
+            data.pop(keys)
 
+    old_address = Address.query.filter_by(address_id = user.id_address).one()
+    new_address = {}
+    
+    if "address" in data.keys():
+        address = data.pop("address")
+        if "street" in address.keys():
+            new_address["street"] = address["street"]
+        else:
+            new_address["street"] = old_address.street
+        if "number" in address.keys():
+            new_address["number"] = address["number"]
+        else:
+            new_address["number"] = old_address.number
+        if "district" in address.keys():
+            new_address["district"] = address["district"]
+        else:
+            new_address["district"] = old_address.district
+        if "zip_code" in address.keys():
+            new_address["zip_code"] = address["zip_code"]
+        else:
+            new_address["zip_code"] = old_address.zip_code
+        if "city" in address.keys():
+            new_address["city"] = address["city"]
+        else:
+            new_address["city"] = old_address.city
+        if "state" in address.keys():
+            new_address["state"] = address["state"]
+        else:
+            old_state = States.query.filter_by(state_id = old_address.state_id).one()
+            new_address["state"] = old_state.name
+        if "reference" in address.keys():
+            new_address["reference"] = address["reference"]
+        else:
+            new_address["reference"] = old_address.reference
+
+       
+        returned_address = create_address(new_address)
+
+        id_address = returned_address["id"]
+        new_id_address ={"id_address":id_address}
+        for key, value in new_id_address.items():
+            setattr(user, key, value)
+        current_app.db.session.add(user)
+        current_app.db.session.commit()
+
+    else: 
+        old_state = States.query.filter_by(state_id = old_address.state_id).one()
+        returned_address = {"state":old_state.name}
+    
+    print(returned_address["state"])
+    
+        
     for key, value in data.items():
         setattr(user, key, value)
-
 
     current_app.db.session.add(user)
     current_app.db.session.commit()
 
-    data = {
-        "email": user.email,
-        "phone": user.phone,
-        "categorie_cnh": user.categorie_cnh
-    }
+    user_address_keys = ["address_id", "street", "number", "district", "zip_code", "city", "reference", "state"]
+    user_address_values = [user.user_address[0].address_id,user.user_address[0].street, user.user_address[0].number, user.user_address[0].district, user.user_address[0].zip_code, user.user_address[0].city, user.user_address[0].reference, returned_address["state"]]
+    
+    user_address_response = dict(zip(user_address_keys, user_address_values))
 
-    return jsonify(data), HTTPStatus.OK
+    completed_address = []
+    completed_address.append(user_address_response)
+
+    
+
+    keys = ["cnh", "cpf", "name", "email", "phone", "categorie_cnh", "user_address"]
+    values = [user.cnh, user.cpf, user.name, user.email, user.phone, user.categorie_cnh, completed_address]
+
+    response = dict(zip(keys, values))
+
+    return jsonify(response), HTTPStatus.OK
 
 
 def delete_user(cnh):
@@ -143,13 +206,14 @@ def get_a_user(cnh):
         
         user_address_response = dict(zip(user_address_keys, user_address_values))
         
-        print(get_user.cnh)
+        completed_address = []
+        completed_address.append(user_address_response)
 
         keys = ["cnh", "cpf", "name", "email", "phone", "categorie_cnh", "user_address"]
-        values = [get_user.cnh, get_user.cpf, get_user.name, get_user.email, get_user.phone, get_user.categorie_cnh, user_address_response]
+        values = [get_user.cnh, get_user.cpf, get_user.name, get_user.email, get_user.phone, get_user.categorie_cnh, completed_address]
 
         response = dict(zip(keys, values))
-        print(response)
+        
 
 
         return jsonify(response), HTTPStatus.OK

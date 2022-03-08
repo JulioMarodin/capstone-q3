@@ -7,6 +7,7 @@ from sqlalchemy.orm.session import Session
 from sqlalchemy.exc import IntegrityError
 
 from app.models.cars_models import Cars
+from app.models.category_car_model import Category_car
 from app.configs.database import db
 
 
@@ -17,8 +18,47 @@ attributes = json.loads(os.getenv('ATTRIBUTES_CAR'))
 def create_car():
     data = request.get_json()
 
+    category_keys = ['body_types', 'fuel_type', 'engine_power', 'km_per_liter', 'allowed_category_cnh', 'differentials']
+
+    missing_category_keys = []
+
+    for item in category_keys:
+        if item not in data.keys():
+            missing_category_keys.append(item)
+        if len(missing_category_keys) != 0:
+            return {'Error': f'missing keys: {missing_category_keys}'}
+
+
+    category = {
+        'body_types': data.pop('body_types'),
+        'fuel_type': data.pop('fuel_type'),
+        'engine_power': data.pop('engine_power'),
+        'km_per_liter': data.pop('km_per_liter'),
+        'allowed_category_cnh': data.pop('allowed_category_cnh'),
+        'differentials': data.pop('differentials')
+    }
+
+    body = Category_car.query.filter_by(body_types=category['body_types']).one_or_none()
+    fuel = Category_car.query.filter_by(fuel_type=category['fuel_type']).one_or_none()
+    engine = Category_car.query.filter_by(engine_power=category['engine_power']).one_or_none()
+    km = Category_car.query.filter_by(km_per_liter=category['km_per_liter']).one_or_none()
+    allowed_cnh = Category_car.query.filter_by(allowed_category_cnh=category['allowed_category_cnh']).one_or_none()
+    differentials = Category_car.query.filter_by(differentials=category['differentials']).one_or_none()
+
+    if body != None and fuel != None and engine != None and km != None and allowed_cnh != None and differentials != None:
+        category_dict = {
+            'category_id': body['category_id']
+        }
+    else:
+        created_category = Category_car(**category)
+        db.session.add(created_category)
+        db.session.commit()
+        category_dict = {
+            'category_id': created_category.category_id
+        }
+
     try:
-        car = Cars(**data)
+        car = Cars(**data, **category_dict)
     except TypeError as e:
         return {'Error': 'Type error bad request'}, HTTPStatus.BAD_REQUEST
 
@@ -136,3 +176,17 @@ def search_car(license_plate):
     car_search = cars_search.all()
     
     return jsonify(car_search), HTTPStatus.OK
+
+
+def available_car():
+    available = request.args.get('available')
+
+    possible_keys = ['true', 'false']
+
+    if not available in possible_keys:
+        return {'Error': 'Value passed by parameter is not allowed. Check the query params and try again'}, HTTPStatus.BAD_REQUEST
+
+
+    cars_search = Cars.query.filter_by(available=available)
+
+    return jsonify(cars_search), HTTPStatus.OK

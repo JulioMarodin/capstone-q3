@@ -7,6 +7,7 @@ from werkzeug.exceptions import NotFound
 from app.models.rental_cars_models import RentalCars
 from app.models.cars_models import Cars
 from app.models.users_models import Users
+from app.models.category_car_model import Category_car
 from app.services.error_treatment import filter_keys, missing_key
 
 def rent_car():
@@ -23,6 +24,16 @@ def rent_car():
         car_to_be_rented = Cars.query.filter_by(license_plate=data['car_license_plate']).first_or_404()
         is_cnh_in_database = Users.query.filter_by(cnh=data['customer_cnh']).first_or_404()
         rentals_not_returned = RentalCars.query.filter_by(customer_cnh=data['customer_cnh']).first()
+        category = Category_car.query.filter_by(category_id=car_to_be_rented.category_id).one_or_none()
+        user_cnh_list = [letter.upper() for letter in is_cnh_in_database.category_cnh]
+        car_cnh = [letter.upper() for letter in category.allowed_category_cnh]
+
+        if category == None:
+            return {'Error': 'Category not found'}, HTTPStatus.NOT_FOUND
+
+        for letter in user_cnh_list:
+            if letter not in car_cnh:
+                return {'Error': 'User cnh does not allow him to drive this car'}, HTTPStatus.CONFLICT
 
         if rentals_not_returned:
             if rentals_not_returned.returned_car == False:
@@ -127,9 +138,9 @@ def uptade_return_date():
         return {'Error': 'This endpoint should receive only the following keys: cnh, plate and return_date'}, HTTPStatus.BAD_REQUEST
     
 
-    user = Users.query.filter_by(cnh=data['cnh']).first_or_none()
-    car = Cars.query.filter_by(license_plate=data['plate']).first_or_none()
-    invoice = RentalCars.query.filter_by(car_license_plate=data['plate'].upper(),returned_car=False).first_or_none()
+    user = Users.query.filter_by(cnh=data['cnh']).one_or_none()
+    car = Cars.query.filter_by(license_plate=data['plate']).one_or_none()
+    invoice = RentalCars.query.filter_by(car_license_plate=data['plate'].upper(),returned_car=False).one_or_none()
 
     if user == None:
         return {'Error': 'user not found'}, HTTPStatus.NOT_FOUND

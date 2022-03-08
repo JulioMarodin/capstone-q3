@@ -1,3 +1,4 @@
+from array import array
 from dataclasses import dataclass
 from sqlalchemy import Column, ForeignKey, Integer, String, Float, DateTime
 from datetime import date
@@ -19,7 +20,7 @@ class Maintenance(db.Model):
     maintenance_id = Column(Integer,primary_key=True, nullable=False, unique=True)
     last_maintenance = Column(DateTime, nullable=False)
     next_maintenance = Column(DateTime, nullable=False)
-    repaired_items = Column(String, nullable=False)
+    repaired_items = Column(db.ARRAY(String), nullable=False)
     maintenance_price = Column(Float, nullable=False)
 
     @staticmethod

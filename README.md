@@ -5,8 +5,7 @@
 #
 
 **Links**
-api: https://www.heroku.com/
-<!-- [Documentação Projeto](https://) -->
+api: https://rental-cars-api.herokuapp.com/
 
 #
 
@@ -24,13 +23,12 @@ api: https://www.heroku.com/
 
 -   ### Users
 
-Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
+* Cadastro de cliente.
 
-**Clientes CNH**
 
 |   url    | metodo |   status    |
 | :------: | :----: | :---------: |
-| `/users` | `Post` | `200 - 400` |
+| `/users` | `Post` | `201` |
 
 **Body** - `json`
 
@@ -41,7 +39,7 @@ Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
 	"name": "Jhon Doe",
 	"email": "mail@mail.com",
 	"phone": "80123456789",
-	"categorie_cnh": "B",
+	"category_cnh": "B",
 	"address": {
 	    "street": "Rio Claro",
 	    "number": "233",
@@ -63,7 +61,7 @@ Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
 	"name": "Jhon Doe",
 	"email": "mail@mail.com",
 	"phone": "80123456789",
-	"categorie_cnh": "B",
+	"category_cnh": "B",
 	"user_address": [
 		{
 			"id": 3,
@@ -78,10 +76,11 @@ Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
 	]
 }
 ```
+* Consultar todos os clientes cadastrados
 
 |   url    | metodo |   status    |
 | :------: | :----: | :---------: |
-| `/users` | `Get`  | `200 - 400` |
+| `/users` | `Get`  | `200` |
 
 **Response** - `json`
 
@@ -92,7 +91,7 @@ Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
 	"name": "Jhon Doe",
 	"email": "mail@mail.com",
 	"phone": "80123456789",
-	"categorie_cnh": "B",
+	"category_cnh": "B",
 	"user_address": [
 		{
 			"id": 3,
@@ -107,10 +106,96 @@ Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
 	]
 }
 ```
+
+* Consultar cliente por CNH
+
+|   url    | metodo |   status    |
+| :------: | :----: | :---------: |
+| `/users/12345678910` | `Get`  | `200` |
+
+**Response** - `json`
+
+```
+{
+	"cnh": "12345678910",
+	"cpf": "12345678910",
+	"name": "Jhon Doe",
+	"email": "mail@mail.com",
+	"phone": "80123456789",
+	"category_cnh": "B",
+	"user_address": [
+		{
+			"id": 3,
+			"street": "Rio Claro",
+			"number": "233",
+			"district": "Riachino",
+			"zip_code": "32340100",
+			"city": "Contagem Grande",
+			"reference": "esquina do v",
+			"state": "Bahia"
+		}
+	]
+}
+```
+
+* Atualizar dados do cliente
+
+|   url    | metodo |   status    |
+| :------: | :----: | :---------: |
+| `/users/12345678910` | `Patch`  | `200` |
+
+**Body** - `json`
+
+```
+{
+	"cnh": "12345678911",
+	"cpf": "12345678911",
+	"name": "Jhon Dooe",
+	"email": "othermail@mail.com",
+	"phone": "80123459876",
+	"category_cnh": "AB",
+	"address": {
+	    "street": "Cantagalo",
+	    "number": "235",
+	    "district": "Riacho",
+	    "zip_code": "32340110",
+	    "city": "Contagem",
+	    "reference": "esquina da praça",
+	    "state": "Minas Gerais"
+	}
+}
+```
+**Response** - `json`
+
+```
+{
+  "cnh": "12345678910",
+  "cpf": "12345678910",
+  "name": "Jhon Dooe",
+  "email": "othermail@mail.com",
+  "phone": "80123459876",
+  "category_cnh": "AB",
+  "user_address": [
+    {
+      "address_id": 4,
+      "street": "Cantagalo",
+      "number": "235",
+      "district": "Riacho",
+      "zip_code": "32340110",
+      "city": "Contagem",
+      "reference": "esquina da praça",
+      "state": "Minas Gerais"
+    }
+  ]
+}
+
+```
+** OBS: CNH e CPF não podem ser alterados**
+
 ---
 
 -   ### Address_user
--   
+  
 *    Cadastrar um endereço .
 
 	Endereço será cadastrado juntamente com o corpo da requisição do cliente, caso o endereço já exista será retornado o id do endereço caso contrário o endereço será cadastrado
@@ -155,11 +240,12 @@ Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
 	}	
 ]
 
+```
+
 *	Atualização de endereço
 
 	Caso ocorrer atualização de endereço de usuário, será adicionado ao banco o novo endereço, não será atualizado, pois pode haver mais de um usuário utilizando o mesmo endereço 
 
-```
 
 ---
 

@@ -41,7 +41,16 @@ Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
 	"name": "Jhon Doe",
 	"email": "mail@mail.com",
 	"phone": "80123456789",
-	"categorie_cnh": "B"
+	"categorie_cnh": "B",
+	"address": {
+	    "street": "Rio Claro",
+	    "number": "233",
+	    "district": "Riachino",
+	    "zip_code": "32340100",
+	    "city": "Contagem Grande",
+	    "reference": "esquina do v",
+	    "state": "Bahia"
+	}
 }
 ```
 
@@ -54,7 +63,19 @@ Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
 	"name": "Jhon Doe",
 	"email": "mail@mail.com",
 	"phone": "80123456789",
-	"categorie_cnh": "B"
+	"categorie_cnh": "B",
+	"user_address": [
+		{
+			"id": 3,
+			"street": "Rio Claro",
+			"number": "233",
+			"district": "Riachino",
+			"zip_code": "32340100",
+			"city": "Contagem Grande",
+			"reference": "esquina do v",
+			"state": "Bahia"
+		}
+	]
 }
 ```
 
@@ -71,32 +92,73 @@ Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
 	"name": "Jhon Doe",
 	"email": "mail@mail.com",
 	"phone": "80123456789",
-	"categorie_cnh": "B"
+	"categorie_cnh": "B",
+	"user_address": [
+		{
+			"id": 3,
+			"street": "Rio Claro",
+			"number": "233",
+			"district": "Riachino",
+			"zip_code": "32340100",
+			"city": "Contagem Grande",
+			"reference": "esquina do v",
+			"state": "Bahia"
+		}
+	]
 }
 ```
 ---
 
 -   ### Address_user
-    Cadastrar um endereço .
+-   
+*    Cadastrar um endereço .
 
-|    url     | metodo |   status    |
-| :--------: | :----: | :---------: |
-| `/address` | `Post` | `200 - 400` |
+	Endereço será cadastrado juntamente com o corpo da requisição do cliente, caso o endereço já exista será retornado o id do endereço caso contrário o endereço será cadastrado
 
-**Body** - `json`
+*	Buscar por endereços
 
-```
-{
-	"xxx": "xxxxx"
-}
-```
+|    url     | metodo | status |
+| :--------: | :----: | :----: |
+| `/addresss` | `Get` | `200`  |
 
 **Response** - `json`
 
 ```
-{
-  	"xxx": "xxxx"
-}
+[
+	{
+		"Minas Gerais":[
+			{
+				"address_id": 1,
+				"street": "Rio Comprido",
+				"number": "235",
+				"district": "Riacho",
+				"zip_code": "32340100",
+				"city": "Contagem",
+				"reference": "esquina",
+				"state_id": 1
+			}
+		]
+	},
+	{
+		"Bahia": [
+			{
+				"address_id": 2,
+				"street": "Rio Curto",
+				"number": "233",
+				"district": "Riacho",
+				"zip_code": "32340100",
+				"city": "Contagem",
+				"reference": "esquina",
+				"state_id": 2
+			}
+		]
+	}	
+]
+
+*	Atualização de endereço
+
+	Caso ocorrer atualização de endereço de usuário, será adicionado ao banco o novo endereço, não será atualizado, pois pode haver mais de um usuário utilizando o mesmo endereço 
+
 ```
 
 ---
@@ -367,29 +429,7 @@ Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
 -   ### States
     Cadastro de  estados.
 
-*   Buscar produto
-
-|   url    | metodo |   status    |
-| :------: | :----: | :---------: |
-| `/state` | `Post` | `200 - 400` |
-
-
-**Body** - 
-```
-{
-	"xxx": "xxxxxx",
-	"xxxxx": "xxx"
-}
-```
-
-**Response** - `json`
-
-```
-{
-	"xxx": "xxxxxx",
-	"xxxxx": "xxx"
-}
-```
+	Estado será cadastrado juntamente com o corpo da requisição do cliente, caso o estado já exista será retornado o id do estado na tabela de endereços caso contrário o estado será cadastrado
 
 ---
 

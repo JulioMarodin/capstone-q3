@@ -123,7 +123,7 @@ def return_car():
 
 
 def uptade_return_date():
-    keys_to_be_received = ['cnh', 'plate', 'return_date']
+    keys_to_be_received = ['cnh', 'car_license_plate', 'rental_return_date', 'rental_total_days']
 
     data = request.get_json()
 
@@ -134,13 +134,13 @@ def uptade_return_date():
         if len(wrong_keys) != 0:
             return {'Error': f'Missing key(s): {wrong_keys}'}, HTTPStatus.BAD_REQUEST
     
-    if len(data.keys()) != 3:
-        return {'Error': 'This endpoint should receive only the following keys: cnh, plate and return_date'}, HTTPStatus.BAD_REQUEST
+    if len(data.keys()) != 4:
+        return {'Error': 'This endpoint should receive only the following keys: cnh, car_license_plate and return_date'}, HTTPStatus.BAD_REQUEST
     
 
     user = Users.query.filter_by(cnh=data['cnh']).one_or_none()
-    car = Cars.query.filter_by(license_plate=data['plate']).one_or_none()
-    invoice = RentalCars.query.filter_by(car_license_plate=data['plate'].upper(),returned_car=False).one_or_none()
+    car = Cars.query.filter_by(license_plate=data['car_license_plate']).one_or_none()
+    invoice = RentalCars.query.filter_by(car_license_plate=data['car_license_plate'].upper(),returned_car=False).one_or_none()
 
     if user == None:
         return {'Error': 'user not found'}, HTTPStatus.NOT_FOUND
@@ -151,7 +151,9 @@ def uptade_return_date():
     if invoice == None:
         return {'Error': 'car available in parking lot'}, HTTPStatus.CONFLICT
     
-    setattr(invoice, 'return_date', data['return_date'])
+    setattr(invoice, 'rental_return_date', data['rental_return_date'])
+    setattr(invoice, 'rental_total_days', data['rental_total_days'])
+    setattr(invoice, 'rental_value', car.daily_rental_price * data['rental_total_days'])
 
     current_app.db.session.add(invoice)
     current_app.db.session.commit()

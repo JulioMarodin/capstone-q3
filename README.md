@@ -58,24 +58,6 @@ Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
 }
 ```
 
-**Clientes CNPJ**
-
-**Body** - `json`
-
-```
-{
-	"cliente": "cliente"
-}
-```
-
-**Response** - `json`
-
-```
-{
-	"cliente": "cliente"
-}
-```
-
 |   url    | metodo |   status    |
 | :------: | :----: | :---------: |
 | `/users` | `Get`  | `200 - 400` |

@@ -592,11 +592,11 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 
 ```
 
-* Listar as manutenções
+* Consultar uma manutenção
 
 |   url   | metodo |   status    |
 | :-----: | :----: | :---------: |
-| `/maintenance/id` | `Get`  | `200 - 400` |
+| `/maintenance/id` | `Get`  | `200` |
 
 **Response** - `json`
 
@@ -615,7 +615,7 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 
 |   url   | metodo |   status    |
 | :-----: | :----: | :---------: |
-| `/maintenance/id` | `Patch`  | `201` |
+| `/maintenance/id` | `Patch`  | `200` |
 
 **Body** - `json`
 

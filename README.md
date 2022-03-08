@@ -16,7 +16,7 @@ api: https://rental-cars-api.herokuapp.com/
 3. Rental_cars
 4. Cars
 5. States
-6. Categoria
+6. Categories
 7. Maintenance_car
 
 ---
@@ -111,7 +111,7 @@ api: https://rental-cars-api.herokuapp.com/
 
 |   url    | metodo |   status    |
 | :------: | :----: | :---------: |
-| `/users/12345678910` | `Get`  | `200` |
+| `/users/cnh` | `Get`  | `200` |
 
 **Response** - `json`
 
@@ -520,42 +520,124 @@ api: https://rental-cars-api.herokuapp.com/
 ---
 
 -   ### Category_car
-    Categoria do carro.
 
-*   Listar carros
+*   Cadastrar uma categoria de um veículo
 
 |   url   | metodo |   status    |
 | :-----: | :----: | :---------: |
-| `/xxxx` | `Get`  | `200 - 400` |
+| `/categories` | `Post`  | `200` |
 
+
+**Body** - `json`
+
+```
+
+{
+    "body_types": "Sedan",
+    "fuel_type": "Gasolina",
+    "engine_power": "116 cv",
+    "km_per_liter": 10.8,
+    "allowed_category_cnh": "B",
+    "differentials": "vidro e trava elétricos"
+}
+
+```
 
 **Response** - `json`
 
 ```
-```
 {
-	"xxx": "xxxxxx",
-	"xxxxx": "xxx"
+  "category_id": 1,
+  "body_types": "Sedan",
+  "fuel_type": "Gasolina",
+  "engine_power": "116 cv",
+  "km_per_liter": 10.8,
+  "allowed_category_cnh": "B",
+  "differentials": "vidro e trava elétricos"
 }
-
+```
 
 ---
 
 -   ### Maintenance_car
-    Manutenção do carro.
 
-*   Listar carros
+
+*   Criar uma manutenção
 
 |   url   | metodo |   status    |
 | :-----: | :----: | :---------: |
-| `/xxxx` | `Get`  | `200 - 400` |
+| `/maintenance` | `Post`  | `201` |
 
+**Body** - `json`
+
+```
+{
+    "last_maintenance": "03/01/2022",
+    "next_maintenance": "03/03/2022",
+    "repaired_items": ["pastilha de freio", "fluido de freio", "óleo"],
+    "maintenance_price": 250.84
+}
+```
 
 **Response** - `json`
 
 ```
 {
-	"xxx": "xxxxxx",
-	"xxxxx": "xxx"
+  "maintenance_id": 1,
+  "last_maintenance": "03/01/2022",
+  "next_maintenance": "03/03/2022",
+  "repaired_items": "{\"pastilha de freio\",\"fluido de freio\",óleo}",
+  "maintenance_price": 250.84
 }
+
+```
+
+* Listar as manutenções
+
+|   url   | metodo |   status    |
+| :-----: | :----: | :---------: |
+| `/maintenance/id` | `Get`  | `200 - 400` |
+
+**Response** - `json`
+
+```
+{
+  "maintenance_id": 1,
+  "last_maintenance": "03/01/2022",
+  "next_maintenance": "03/03/2022",
+  "repaired_items": "{\"pastilha de freio\",\"fluido de freio\",óleo}",
+  "maintenance_price": 250.84
+}
+
+```
+
+*   Atualizar os dados de uma manutenção
+
+|   url   | metodo |   status    |
+| :-----: | :----: | :---------: |
+| `/maintenance/id` | `Patch`  | `201` |
+
+**Body** - `json`
+
+```
+{
+    "last_maintenance": "02/01/2022",
+    "next_maintenance": "03/04/2022",
+    "repaired_items": ["pastilha de freio", "fluido de freio", "óleo, correia dentada"],
+    "maintenance_price": 310.92
+}
+```
+
+**Response** - `json`
+
+```
+{
+  "maintenance_id": 1,
+  "last_maintenance": "02/01/2022",
+  "next_maintenance": "03/04/2022",
+  "repaired_items": "{\"pastilha de freio\",\"fluido de freio\",\"óleo, correia dentada\"}",
+  "maintenance_price": 310.92
+}
+
+```
 ---

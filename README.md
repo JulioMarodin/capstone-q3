@@ -5,8 +5,7 @@
 #
 
 **Links**
-api: https://www.heroku.com/
-<!-- [Documentação Projeto](https://) -->
+api: https://rental-cars-api.herokuapp.com/
 
 #
 
@@ -17,20 +16,19 @@ api: https://www.heroku.com/
 3. Rental_cars
 4. Cars
 5. States
-6. Categoria
+6. Categories
 7. Maintenance_car
 
 ---
 
 -   ### Users
 
-Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
+* Cadastro de cliente.
 
-**Clientes CNH**
 
 |   url    | metodo |   status    |
 | :------: | :----: | :---------: |
-| `/users` | `Post` | `200 - 400` |
+| `/users` | `Post` | `201` |
 
 **Body** - `json`
 
@@ -41,7 +39,7 @@ Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
 	"name": "Jhon Doe",
 	"email": "mail@mail.com",
 	"phone": "80123456789",
-	"categorie_cnh": "B",
+	"category_cnh": "B",
 	"address": {
 	    "street": "Rio Claro",
 	    "number": "233",
@@ -63,7 +61,7 @@ Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
 	"name": "Jhon Doe",
 	"email": "mail@mail.com",
 	"phone": "80123456789",
-	"categorie_cnh": "B",
+	"category_cnh": "B",
 	"user_address": [
 		{
 			"id": 3,
@@ -78,28 +76,11 @@ Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
 	]
 }
 ```
-
-**Clientes CNPJ**
-
-**Body** - `json`
-
-```
-{
-	"cliente": "cliente"
-}
-```
-
-**Response** - `json`
-
-```
-{
-	"cliente": "cliente"
-}
-```
+* Consultar todos os clientes cadastrados
 
 |   url    | metodo |   status    |
 | :------: | :----: | :---------: |
-| `/users` | `Get`  | `200 - 400` |
+| `/users` | `Get`  | `200` |
 
 **Response** - `json`
 
@@ -110,7 +91,7 @@ Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
 	"name": "Jhon Doe",
 	"email": "mail@mail.com",
 	"phone": "80123456789",
-	"categorie_cnh": "B",
+	"category_cnh": "B",
 	"user_address": [
 		{
 			"id": 3,
@@ -125,13 +106,99 @@ Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
 	]
 }
 ```
+
+* Consultar cliente por CNH
+
+|   url    | metodo |   status    |
+| :------: | :----: | :---------: |
+| `/users/cnh` | `Get`  | `200` |
+
+**Response** - `json`
+
+```
+{
+	"cnh": "12345678910",
+	"cpf": "12345678910",
+	"name": "Jhon Doe",
+	"email": "mail@mail.com",
+	"phone": "80123456789",
+	"category_cnh": "B",
+	"user_address": [
+		{
+			"id": 3,
+			"street": "Rio Claro",
+			"number": "233",
+			"district": "Riachino",
+			"zip_code": "32340100",
+			"city": "Contagem Grande",
+			"reference": "esquina do v",
+			"state": "Bahia"
+		}
+	]
+}
+```
+
+* Atualizar dados do cliente
+
+|   url    | metodo |   status    |
+| :------: | :----: | :---------: |
+| `/users/12345678910` | `Patch`  | `200` |
+
+**Body** - `json`
+
+```
+{
+	"cnh": "12345678911",
+	"cpf": "12345678911",
+	"name": "Jhon Dooe",
+	"email": "othermail@mail.com",
+	"phone": "80123459876",
+	"category_cnh": "AB",
+	"address": {
+	    "street": "Cantagalo",
+	    "number": "235",
+	    "district": "Riacho",
+	    "zip_code": "32340110",
+	    "city": "Contagem",
+	    "reference": "esquina da praça",
+	    "state": "Minas Gerais"
+	}
+}
+```
+**Response** - `json`
+
+```
+{
+  "cnh": "12345678910",
+  "cpf": "12345678910",
+  "name": "Jhon Dooe",
+  "email": "othermail@mail.com",
+  "phone": "80123459876",
+  "category_cnh": "AB",
+  "user_address": [
+    {
+      "address_id": 4,
+      "street": "Cantagalo",
+      "number": "235",
+      "district": "Riacho",
+      "zip_code": "32340110",
+      "city": "Contagem",
+      "reference": "esquina da praça",
+      "state": "Minas Gerais"
+    }
+  ]
+}
+
+```
+**OBS: CNH e CPF não podem ser alterados**
+
 ---
 
 -   ### Address_user
--   
+  
 *    Cadastrar um endereço .
 
-	Endereço será cadastrado juntamente com o corpo da requisição do cliente, caso o endereço já exista será retornado o id do endereço caso contrário o endereço será cadastrado
+Endereço será cadastrado juntamente com o corpo da requisição do cliente, caso o endereço já exista será retornado o id do endereço caso contrário o endereço será cadastrado
 
 *	Buscar por endereços
 
@@ -173,11 +240,12 @@ Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
 	}	
 ]
 
+```
+
 *	Atualização de endereço
 
 	Caso ocorrer atualização de endereço de usuário, será adicionado ao banco o novo endereço, não será atualizado, pois pode haver mais de um usuário utilizando o mesmo endereço 
 
-```
 
 ---
 
@@ -452,42 +520,124 @@ Cadastro de cliente (pessoa física ou jurídica que vai alugar os veículos).
 ---
 
 -   ### Category_car
-    Categoria do carro.
 
-*   Listar carros
+*   Cadastrar uma categoria de um veículo
 
 |   url   | metodo |   status    |
 | :-----: | :----: | :---------: |
-| `/xxxx` | `Get`  | `200 - 400` |
+| `/categories` | `Post`  | `200` |
 
+
+**Body** - `json`
+
+```
+
+{
+    "body_types": "Sedan",
+    "fuel_type": "Gasolina",
+    "engine_power": "116 cv",
+    "km_per_liter": 10.8,
+    "allowed_category_cnh": "B",
+    "differentials": "vidro e trava elétricos"
+}
+
+```
 
 **Response** - `json`
 
 ```
-```
 {
-	"xxx": "xxxxxx",
-	"xxxxx": "xxx"
+  "category_id": 1,
+  "body_types": "Sedan",
+  "fuel_type": "Gasolina",
+  "engine_power": "116 cv",
+  "km_per_liter": 10.8,
+  "allowed_category_cnh": "B",
+  "differentials": "vidro e trava elétricos"
 }
-
+```
 
 ---
 
 -   ### Maintenance_car
-    Manutenção do carro.
 
-*   Listar carros
+
+*   Criar uma manutenção
 
 |   url   | metodo |   status    |
 | :-----: | :----: | :---------: |
-| `/xxxx` | `Get`  | `200 - 400` |
+| `/maintenance` | `Post`  | `201` |
 
+**Body** - `json`
+
+```
+{
+    "last_maintenance": "03/01/2022",
+    "next_maintenance": "03/03/2022",
+    "repaired_items": ["pastilha de freio", "fluido de freio", "óleo"],
+    "maintenance_price": 250.84
+}
+```
 
 **Response** - `json`
 
 ```
 {
-	"xxx": "xxxxxx",
-	"xxxxx": "xxx"
+  "maintenance_id": 1,
+  "last_maintenance": "03/01/2022",
+  "next_maintenance": "03/03/2022",
+  "repaired_items": "{\"pastilha de freio\",\"fluido de freio\",óleo}",
+  "maintenance_price": 250.84
 }
+
+```
+
+* Consultar uma manutenção
+
+|   url   | metodo |   status    |
+| :-----: | :----: | :---------: |
+| `/maintenance/id` | `Get`  | `200` |
+
+**Response** - `json`
+
+```
+{
+  "maintenance_id": 1,
+  "last_maintenance": "03/01/2022",
+  "next_maintenance": "03/03/2022",
+  "repaired_items": "{\"pastilha de freio\",\"fluido de freio\",óleo}",
+  "maintenance_price": 250.84
+}
+
+```
+
+*   Atualizar os dados de uma manutenção
+
+|   url   | metodo |   status    |
+| :-----: | :----: | :---------: |
+| `/maintenance/id` | `Patch`  | `200` |
+
+**Body** - `json`
+
+```
+{
+    "last_maintenance": "02/01/2022",
+    "next_maintenance": "03/04/2022",
+    "repaired_items": ["pastilha de freio", "fluido de freio", "óleo, correia dentada"],
+    "maintenance_price": 310.92
+}
+```
+
+**Response** - `json`
+
+```
+{
+  "maintenance_id": 1,
+  "last_maintenance": "02/01/2022",
+  "next_maintenance": "03/04/2022",
+  "repaired_items": "{\"pastilha de freio\",\"fluido de freio\",\"óleo, correia dentada\"}",
+  "maintenance_price": 310.92
+}
+
+```
 ---

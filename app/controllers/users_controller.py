@@ -210,7 +210,7 @@ def get_a_user(cnh):
         completed_address.append(user_address_response)
 
         keys = ["cnh", "cpf", "name", "email", "phone", "category_cnh", "user_address"]
-        values = [get_user.cnh, get_user.cpf, get_user.name, get_user.email, get_user.phone, get_user.categorie_cnh, completed_address]
+        values = [get_user.cnh, get_user.cpf, get_user.name, get_user.email, get_user.phone, get_user.category_cnh, completed_address]
 
         response = dict(zip(keys, values))
         

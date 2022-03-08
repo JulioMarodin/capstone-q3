@@ -22,7 +22,7 @@ class Category_car(db.Model):
     fuel_type = Column(String, nullable=False)
     engine_power = Column(String, nullable=False)
     km_per_liter = Column(Float, nullable=False)
-    allowed_category_cnh = Column(String(1), nullable=False)
+    allowed_category_cnh = Column(String(2), nullable=False)
     differentials = Column(String, nullable=False)
 
     cars = relationship("Cars", backref=backref("category", uselist=False))

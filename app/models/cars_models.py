@@ -19,6 +19,8 @@ class Cars(db.Model):
     daily_rental_price: float
     daily_fixed_km: int
     available: bool
+    category_id: int
+    maintenance_id: int
 
     __tablename__ = 'tb_cars'
 

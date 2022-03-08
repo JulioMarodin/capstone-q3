@@ -57,8 +57,8 @@ def create_user():
         completed_address = []
         completed_address.append(returned_address)
 
-        user_keys = ["cnh", "cpf", "name", "email", "phone", "categorie_cnh", "user_address"]
-        user_values = [user.cnh, user.cpf, user.name, user.email, user.phone, user.categorie_cnh, completed_address]
+        user_keys = ["cnh", "cpf", "name", "email", "phone", "category_cnh", "user_address"]
+        user_values = [user.cnh, user.cpf, user.name, user.email, user.phone, user.category_cnh, completed_address]
 
         
         response = dict(zip(user_keys, user_values))
@@ -84,8 +84,8 @@ def get_users():
         completed_address = []
         completed_address.append(user_address_response)
 
-        keys = ["cnh", "cpf", "name", "email", "phone", "categorie_cnh", "user_address"]
-        values = [user.cnh, user.cpf, user.name, user.email, user.phone, user.categorie_cnh, completed_address]
+        keys = ["cnh", "cpf", "name", "email", "phone", "category_cnh", "user_address"]
+        values = [user.cnh, user.cpf, user.name, user.email, user.phone, user.category_cnh, completed_address]
         response = dict(zip(keys, values))
         all_users.append(response)
     
@@ -173,8 +173,8 @@ def patch_users(cnh):
 
     
 
-    keys = ["cnh", "cpf", "name", "email", "phone", "categorie_cnh", "user_address"]
-    values = [user.cnh, user.cpf, user.name, user.email, user.phone, user.categorie_cnh, completed_address]
+    keys = ["cnh", "cpf", "name", "email", "phone", "category_cnh", "user_address"]
+    values = [user.cnh, user.cpf, user.name, user.email, user.phone, user.category_cnh, completed_address]
 
     response = dict(zip(keys, values))
 
@@ -209,8 +209,8 @@ def get_a_user(cnh):
         completed_address = []
         completed_address.append(user_address_response)
 
-        keys = ["cnh", "cpf", "name", "email", "phone", "categorie_cnh", "user_address"]
-        values = [get_user.cnh, get_user.cpf, get_user.name, get_user.email, get_user.phone, get_user.categorie_cnh, completed_address]
+        keys = ["cnh", "cpf", "name", "email", "phone", "category_cnh", "user_address"]
+        values = [get_user.cnh, get_user.cpf, get_user.name, get_user.email, get_user.phone, get_user.category_cnh, completed_address]
 
         response = dict(zip(keys, values))
         
@@ -219,5 +219,3 @@ def get_a_user(cnh):
         return jsonify(response), HTTPStatus.OK
     except AttributeError:
         return {'error': f'user cnh {cnh} not found'}, HTTPStatus.NOT_FOUND
-    
-    

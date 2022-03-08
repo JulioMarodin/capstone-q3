@@ -12,7 +12,7 @@ class Users(db.Model):
     name: str
     email: str
     phone: str
-    categorie_cnh: str
+    category_cnh: str
 
     id_address: int
 
@@ -25,7 +25,7 @@ class Users(db.Model):
     name = Column(String, nullable=False)
     email = Column(String, unique=True, nullable=False)
     phone = Column(String(11), unique=True, nullable=False)
-    categorie_cnh = Column(String(2), nullable=False)
+    category_cnh = Column(String(2), nullable=False)
 
     id_address = Column(Integer, ForeignKey("tb_address.address_id"), nullable=False)
 

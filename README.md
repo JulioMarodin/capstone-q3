@@ -198,7 +198,7 @@ api: https://rental-cars-api.herokuapp.com/
   
 *    Cadastrar um endereço .
 
-	Endereço será cadastrado juntamente com o corpo da requisição do cliente, caso o endereço já exista será retornado o id do endereço caso contrário o endereço será cadastrado
+Endereço será cadastrado juntamente com o corpo da requisição do cliente, caso o endereço já exista será retornado o id do endereço caso contrário o endereço será cadastrado
 
 *	Buscar por endereços
 

@@ -190,7 +190,7 @@ api: https://rental-cars-api.herokuapp.com/
 }
 
 ```
-** OBS: CNH e CPF não podem ser alterados**
+**OBS: CNH e CPF não podem ser alterados**
 
 ---
 

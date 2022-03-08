@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from sqlalchemy import Column, Integer, String, Float, DateTime
+from sqlalchemy import Column, ForeignKey, Integer, String, Float, DateTime
 from datetime import date
 
 from app.configs.database import db
@@ -16,7 +16,7 @@ class Maintenance(db.Model):
 
     __tablename__ = 'tb_maintenance_car'
 
-    maintenance_id = Column(Integer, primary_key=True)
+    maintenance_id = Column(Integer,primary_key=True, nullable=False, unique=True)
     last_maintenance = Column(DateTime, nullable=False)
     next_maintenance = Column(DateTime, nullable=False)
     repaired_items = Column(String, nullable=False)

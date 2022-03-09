@@ -38,16 +38,16 @@ def create_car():
         'differentials': data.pop('differentials')
     }
 
-    body = Category_car.query.filter_by(body_types=category['body_types']).one_or_none()
-    fuel = Category_car.query.filter_by(fuel_type=category['fuel_type']).one_or_none()
-    engine = Category_car.query.filter_by(engine_power=category['engine_power']).one_or_none()
-    km = Category_car.query.filter_by(km_per_liter=category['km_per_liter']).one_or_none()
-    allowed_cnh = Category_car.query.filter_by(allowed_category_cnh=category['allowed_category_cnh']).one_or_none()
-    differentials = Category_car.query.filter_by(differentials=category['differentials']).one_or_none()
+    body = Category_car.query.filter_by(body_types=category['body_types']).first()   
+    fuel = Category_car.query.filter_by(fuel_type=category['fuel_type']).first()
+    engine = Category_car.query.filter_by(engine_power=category['engine_power']).first()
+    km = Category_car.query.filter_by(km_per_liter=category['km_per_liter']).first()
+    allowed_cnh = Category_car.query.filter_by(allowed_category_cnh=category['allowed_category_cnh']).first()
+    differentials = Category_car.query.filter_by(differentials=category['differentials']).first()
 
     if body != None and fuel != None and engine != None and km != None and allowed_cnh != None and differentials != None:
         category_dict = {
-            'category_id': body['category_id']
+            'category_id': body.category_id
         }
     else:
         created_category = Category_car(**category)
@@ -97,6 +97,7 @@ def create_car():
     except IntegrityError:
         return {'Error': 'chassi or license_plate already registered'}, HTTPStatus.CONFLICT
 
+    car.licensing_expiration = car.licensing_expiration.strftime("%d/%m/%Y")
     
     return jsonify(car), HTTPStatus.CREATED
     

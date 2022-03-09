@@ -14,7 +14,7 @@ def create_maintenance():
     incoming_keys = data.keys()
     keys = Maintenance.keys
     format_date = Maintenance.format_date
-    car = Cars.query.filter_by(license_plate=data.car_license_plate).one_or_none()
+    car = Cars.query.filter_by(license_plate=data["car_license_plate"]).one_or_none()
 
     if car == None:
         return {'Error': 'car not found'}, HTTPStatus.NOT_FOUND

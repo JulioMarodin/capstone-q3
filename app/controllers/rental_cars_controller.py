@@ -84,7 +84,7 @@ def return_car():
         rental_not_returned = RentalCars.query.filter_by(customer_cnh=data['cnh'],returned_car=False).first()
 
         if not rental_not_returned:
-            return {'Error': 'User has no rental pending'}, HTTPStatus.BAD_REQUEST
+            return {'Error': 'User has no rental pending'}, HTTPStatus.NOT_FOUND
 
         real_km_per_day = (data['total_returned_km'] - rental_not_returned.initial_km) / data['rental_real_total_days']
 

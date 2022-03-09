@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from sqlalchemy import Column, Integer, String, Float, DateTime, Boolean
+from sqlalchemy import Column, ForeignKey, Integer, String, Float, DateTime, Boolean
 from datetime import date
 
 from app.configs.database import db
@@ -19,6 +19,8 @@ class Cars(db.Model):
     daily_rental_price: float
     daily_fixed_km: int
     available: bool
+    category_id: int
+    maintenance_id: int
 
     __tablename__ = 'tb_cars'
 
@@ -34,3 +36,6 @@ class Cars(db.Model):
     daily_rental_price = Column(Float, nullable=False)
     daily_fixed_km = Column(Integer, nullable=False)
     available = Column(Boolean, default=True)
+
+    category_id = Column(Integer, ForeignKey('tb_category_car.category_id'), nullable=False)
+    maintenance_id = Column(Integer, ForeignKey('tb_maintenance_car.maintenance_id'),nullable=True)

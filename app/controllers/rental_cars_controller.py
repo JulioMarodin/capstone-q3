@@ -7,6 +7,7 @@ from werkzeug.exceptions import NotFound
 from app.models.rental_cars_models import RentalCars
 from app.models.cars_models import Cars
 from app.models.users_models import Users
+from app.models.category_car_model import Category_car
 from app.services.error_treatment import filter_keys, missing_key
 
 def rent_car():
@@ -17,12 +18,22 @@ def rent_car():
         data = request.get_json()
         keys = RentalCars.create_keys
 
-        filter_keys(data, keys)
-        missing_key(data, keys)
+        filter_keys(data.keys(), keys)
+        missing_key(data.keys(), keys)
 
         car_to_be_rented = Cars.query.filter_by(license_plate=data['car_license_plate']).first_or_404()
         is_cnh_in_database = Users.query.filter_by(cnh=data['customer_cnh']).first_or_404()
         rentals_not_returned = RentalCars.query.filter_by(customer_cnh=data['customer_cnh']).first()
+        category = Category_car.query.filter_by(category_id=car_to_be_rented.category_id).one_or_none()
+        user_cnh_list = [letter.upper() for letter in is_cnh_in_database.category_cnh]
+        car_cnh = [letter.upper() for letter in category.allowed_category_cnh]
+
+        if category == None:
+            return {'Error': 'Category not found'}, HTTPStatus.NOT_FOUND
+
+        for letter in user_cnh_list:
+            if letter not in car_cnh:
+                return {'Error': 'User cnh does not allow him to drive this car'}, HTTPStatus.CONFLICT
 
         if rentals_not_returned:
             if rentals_not_returned.returned_car == False:
@@ -65,15 +76,15 @@ def return_car():
 
         keys = RentalCars.return_keys
 
-        filter_keys(data, keys)
-        missing_key(data, keys)
+        filter_keys(data.keys(), keys)
+        missing_key(data.keys(), keys)
         
         car_to_be_returned = Cars.query.filter_by(license_plate=data['car_license_plate'].upper()).first_or_404()
         is_cnh_in_database = Users.query.filter_by(cnh=data['cnh']).first_or_404()
         rental_not_returned = RentalCars.query.filter_by(customer_cnh=data['cnh'],returned_car=False).first()
 
         if not rental_not_returned:
-            return {'Error': 'User has no rental pending'}, HTTPStatus.BAD_REQUEST
+            return {'Error': 'User has no rental pending'}, HTTPStatus.NOT_FOUND
 
         real_km_per_day = (data['total_returned_km'] - rental_not_returned.initial_km) / data['rental_real_total_days']
 
@@ -109,6 +120,45 @@ def return_car():
 
     except NotFound:
         return {'Error': 'Car or cnh not found'}, HTTPStatus.NOT_FOUND
+
+
+def uptade_return_date():
+    keys_to_be_received = ['cnh', 'car_license_plate', 'rental_return_date', 'rental_total_days']
+
+    data = request.get_json()
+
+    wrong_keys = []
+    for item in data.keys():
+        if item not in keys_to_be_received:
+            wrong_keys.append(item)
+        if len(wrong_keys) != 0:
+            return {'Error': f'Missing key(s): {wrong_keys}'}, HTTPStatus.BAD_REQUEST
+    
+    if len(data.keys()) != 4:
+        return {'Error': 'This endpoint should receive only the following keys: cnh, car_license_plate and return_date'}, HTTPStatus.BAD_REQUEST
+    
+
+    user = Users.query.filter_by(cnh=data['cnh']).one_or_none()
+    car = Cars.query.filter_by(license_plate=data['car_license_plate']).one_or_none()
+    invoice = RentalCars.query.filter_by(car_license_plate=data['car_license_plate'].upper(),returned_car=False).one_or_none()
+
+    if user == None:
+        return {'Error': 'user not found'}, HTTPStatus.NOT_FOUND
+    
+    if car == None:
+        return {'Error': 'car not found'}, HTTPStatus.NOT_FOUND
+    
+    if invoice == None:
+        return {'Error': 'car available in parking lot'}, HTTPStatus.CONFLICT
+    
+    setattr(invoice, 'rental_return_date', data['rental_return_date'])
+    setattr(invoice, 'rental_total_days', data['rental_total_days'])
+    setattr(invoice, 'rental_value', car.daily_rental_price * data['rental_total_days'])
+
+    current_app.db.session.add(invoice)
+    current_app.db.session.commit()
+
+    return jsonify(invoice), HTTPStatus.OK
 
 
 def get_all():

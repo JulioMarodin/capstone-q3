@@ -22,9 +22,11 @@ def create_address(received_address):
     session = current_app.db.session()
    
     data = received_address
-    
-    state_name = data.pop("state")
-    state_id = create_state(state_name)
+
+    if "state" in data.keys():
+        state_name = data.pop("state")
+        state_id = create_state(state_name)
+
     keys = ["id","street", "number", "district", "zip_code", "city", "reference", "state"]
 
     try:
@@ -70,4 +72,29 @@ def create_address(received_address):
     r = address[0]
     values = [r.address_id, r.street, r.number, r.district, r.zip_code, r.city, r.reference, state_name]
     response = dict(zip(keys, values))
-    return response, HTTPStatus.OK
+    return response
+
+def get_states():
+    states_list = []
+    states_ids = []
+    address_list = []
+    completed_state_list = []
+    states = States.query.all()
+    for state in states:
+        states_ids.append(state.state_id)
+        states_list.append(state.name)
+    
+
+    addresses = Address.query.all()
+    
+    for state_id in states_ids:
+
+        for address in addresses:
+            if address.state_id == state_id:
+                address_list.append(address)
+            list_address_list=[] 
+            list_address_list.append(address_list)
+            response = dict(zip(states_list[state_id-1:2], list_address_list))
+        completed_state_list.append(response)
+        address_list=[]
+    return jsonify(completed_state_list), HTTPStatus.OK

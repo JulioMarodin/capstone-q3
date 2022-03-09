@@ -26,9 +26,9 @@ api: https://rental-cars-api.herokuapp.com/
 * Cadastro de cliente.
 
 
-|   url    | metodo |   status    |
-| :------: | :----: | :---------: |
-| `/users` | `Post` | `201` |
+|   url    | metodo | status |
+| :------: | :----: | :----: |
+| `/users` | `Post` | `201`  |
 
 **Body** - `json`
 
@@ -78,9 +78,9 @@ api: https://rental-cars-api.herokuapp.com/
 ```
 * Consultar todos os clientes cadastrados
 
-|   url    | metodo |   status    |
-| :------: | :----: | :---------: |
-| `/users` | `Get`  | `200` |
+|   url    | metodo | status |
+| :------: | :----: | :----: |
+| `/users` | `Get`  | `200`  |
 
 **Response** - `json`
 
@@ -109,9 +109,9 @@ api: https://rental-cars-api.herokuapp.com/
 
 * Consultar cliente por CNH
 
-|   url    | metodo |   status    |
-| :------: | :----: | :---------: |
-| `/users/cnh` | `Get`  | `200` |
+|     url      | metodo | status |
+| :----------: | :----: | :----: |
+| `/users/cnh` | `Get`  | `200`  |
 
 **Response** - `json`
 
@@ -140,9 +140,9 @@ api: https://rental-cars-api.herokuapp.com/
 
 * Atualizar dados do cliente
 
-|   url    | metodo |   status    |
-| :------: | :----: | :---------: |
-| `/users/12345678910` | `Patch`  | `200` |
+|         url          | metodo  | status |
+| :------------------: | :-----: | :----: |
+| `/users/12345678910` | `Patch` | `200`  |
 
 **Body** - `json`
 
@@ -202,9 +202,9 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 
 *	Buscar por endereços
 
-|    url     | metodo | status |
-| :--------: | :----: | :----: |
-| `/addresss` | `Get` | `200`  |
+|     url     | metodo | status |
+| :---------: | :----: | :----: |
+| `/addresss` | `Get`  | `200`  |
 
 **Response** - `json`
 
@@ -293,6 +293,48 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 	"car_license_plate": "ABC1234"
 }
 ```
+
+*   Atualizar a data de devolução do veículo
+
+|           url            | metodo  | status |
+| :----------------------: | :-----: | :----: |
+| `/rentals/update_return` | `Patch` | `200`  |
+
+
+
+**Body** - `json`
+
+```
+{
+	"rental_return_date": "11/03/2022",
+	"rental_total_days": 3,
+	"cnh": "12345678910",
+	"car_license_plate": "ABD1234"
+}
+```
+
+**Response** - `json`
+
+```
+{
+	"rental_id": 3,
+	"rental_date": "Tue, 08 Mar 2022 00:00:00 GMT",
+	"rental_return_date": "Fri, 11 Mar 2022 00:00:00 GMT",
+	"rental_real_return_date": null,
+	"returned_car": false,
+	"rental_total_days": 3,
+	"rental_real_total_days": null,
+	"initial_km": 700.0,
+	"final_km": null,
+	"total_fixed_km": 100,
+	"total_returned_km": null,
+	"rental_value": 300.0,
+	"rental_real_value": null,
+	"customer_cnh": "12345678910",
+	"car_license_plate": "ABD1234"
+}
+```
+
 
 *   Devolver um veículo
 
@@ -523,9 +565,9 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 
 *   Cadastrar uma categoria de um veículo
 
-|   url   | metodo |   status    |
-| :-----: | :----: | :---------: |
-| `/categories` | `Post`  | `200` |
+|      url      | metodo | status |
+| :-----------: | :----: | :----: |
+| `/categories` | `Post` | `200`  |
 
 
 **Body** - `json`
@@ -564,9 +606,9 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 
 *   Criar uma manutenção
 
-|   url   | metodo |   status    |
-| :-----: | :----: | :---------: |
-| `/maintenance` | `Post`  | `201` |
+|      url       | metodo | status |
+| :------------: | :----: | :----: |
+| `/maintenance` | `Post` | `201`  |
 
 **Body** - `json`
 
@@ -594,9 +636,9 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 
 * Consultar uma manutenção
 
-|   url   | metodo |   status    |
-| :-----: | :----: | :---------: |
-| `/maintenance/id` | `Get`  | `200` |
+|        url        | metodo | status |
+| :---------------: | :----: | :----: |
+| `/maintenance/id` | `Get`  | `200`  |
 
 **Response** - `json`
 
@@ -613,9 +655,9 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 
 *   Atualizar os dados de uma manutenção
 
-|   url   | metodo |   status    |
-| :-----: | :----: | :---------: |
-| `/maintenance/id` | `Patch`  | `200` |
+|        url        | metodo  | status |
+| :---------------: | :-----: | :----: |
+| `/maintenance/id` | `Patch` | `200`  |
 
 **Body** - `json`
 

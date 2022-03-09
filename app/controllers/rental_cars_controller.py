@@ -173,7 +173,7 @@ def get_by_plate(plate):
         return jsonify(invoice), HTTPStatus.OK
     
     except NotFound:
-        return {'Error': 'Car not found'}, HTTPStatus.NOT_FOUND
+        return {'Error': 'Car not found or car not rented'}, HTTPStatus.NOT_FOUND
 
 def get_all_by_users(cnh):
     invoice = RentalCars.query.filter_by(customer_cnh=cnh).all()

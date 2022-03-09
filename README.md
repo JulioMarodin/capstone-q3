@@ -430,7 +430,7 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 
 |           url            | metodo | status |
 | :----------------------: | :----: | :----: |
-| `/rentals/plate/abc1234` | `Get`  | `200`  |
+| `/rentals/plate/{placa}` | `Get`  | `200`  |
 
 
 **Response** - `json`
@@ -457,9 +457,9 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 
 *   Buscar todos os alugueis pela cnh
 
-|            url             | metodo | status |
-| :------------------------: | :----: | :----: |
-| `/rentals/all/12345678910` | `Get`  | `200`  |
+|         url          | metodo | status |
+| :------------------: | :----: | :----: |
+| `/rentals/all/{cnh}` | `Get`  | `200`  |
 
 
 **Response** - `json`
@@ -505,9 +505,9 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 
 *   Buscar aluguel atual do carro pela cnh
 
-|              url               | metodo | status |
-| :----------------------------: | :----: | :----: |
-| `/rentals/current/12345678910` | `Get`  | `200`  |
+|           url            | metodo | status |
+| :----------------------: | :----: | :----: |
+| `/rentals/current/{cnh}` | `Get`  | `200`  |
 
 
 **Response** - `json`
@@ -534,70 +534,11 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 
 ---
 
--   ### Cars
-    Gerenciamento de carros.
-
-*   Adiciobar o carro
-
-|  url   | metodo |   status    |
-| :----: | :----: | :---------: |
-| `/xxx` | `Post` | `200 - 400` |
-
-
-**Response** - `json`
-
-```
-{
-	"xxx": "xxxxxx",
-	"xxxxx": "xxx"
-}
-```
----
-
 -   ### States
     Cadastro de  estados.
 
 	Estado será cadastrado juntamente com o corpo da requisição do cliente, caso o estado já exista será retornado o id do estado na tabela de endereços caso contrário o estado será cadastrado
 
----
-
--   ### Category_car
-
-*   Cadastrar uma categoria de um veículo
-
-|      url      | metodo | status |
-| :-----------: | :----: | :----: |
-| `/categories` | `Post` | `200`  |
-
-
-**Body** - `json`
-
-```
-
-{
-    "body_types": "Sedan",
-    "fuel_type": "Gasolina",
-    "engine_power": "116 cv",
-    "km_per_liter": 10.8,
-    "allowed_category_cnh": "B",
-    "differentials": "vidro e trava elétricos"
-}
-
-```
-
-**Response** - `json`
-
-```
-{
-  "category_id": 1,
-  "body_types": "Sedan",
-  "fuel_type": "Gasolina",
-  "engine_power": "116 cv",
-  "km_per_liter": 10.8,
-  "allowed_category_cnh": "B",
-  "differentials": "vidro e trava elétricos"
-}
-```
 
 ---
 
@@ -683,3 +624,136 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 
 ```
 ---
+
+#### Cadastrar um carro
+
+* Cadastrar carro
+
+|   url   | metodo | status |
+| :-----: | :----: | :----: |
+| `/cars` | `Post` | `201`  |
+
+**Body** - `json`
+
+```
+{
+	"chassi": "2H2XA59BWDY987695",
+	"license_plate": "BRA1E31",
+	"brand": "FIAT",
+	"model": "Toro",
+	"year": "21/22",
+	"color_car": "Branca",
+	"image": "https://bali.com.br/wp-content/uploads/bfi_thumb/TORO_FREEDOM-1-70mbkij6i1c5r3hq1nri58sbhq7665gwx4j8tl5cv4q.png",
+	"current_km": 2000.1,
+	"licensing_expiration": "12/01/2023",
+	"daily_rental_price": 209.9,
+	"daily_fixed_km": 120
+}
+```
+
+**Response** - `json`
+
+```
+{
+
+}
+```
+
+
+* Retorna todos os carros
+
+|   url   | metodo | status |
+| :-----: | :----: | :----: |
+| `/cars` | `Get`  | `200`  |
+
+
+**Response** - `json`
+
+```
+{
+
+}
+```
+
+
+* Retornar um carro específico
+
+|       url        | metodo | status |
+| :--------------: | :----: | :----: |
+| `/cars/{chassi}` | `Get`  | `200`  |
+
+**Response** - `json`
+
+```
+{
+
+}
+```
+
+
+* Retornar carros disponíveis ou não para locação
+
+|           url           | metodo | status |
+| :---------------------: | :----: | :----: |
+| `/cars?available=true`  | `Get`  | `200`  |
+| `/cars?available=false` | `Get`  | `200`  |
+
+**Response** - `json`
+
+```
+{
+
+}
+```
+
+
+* Atualizar um carro específico
+
+|       url        | metodo  | status |
+| :--------------: | :-----: | :----: |
+| `/cars/{chassi}` | `Patch` | `200`  |
+
+**Body** - `json`
+
+```
+{
+	"license_plate": "BRA1E31",
+	"brand": "FIAT",
+	"model": "Toro",
+	"year": "21/22",
+	"color_car": "Branca",
+	"image": "https://bali.com.br/wp-content/uploads/bfi_thumb/TORO_FREEDOM-1-70mbkij6i1c5r3hq1nri58sbhq7665gwx4j8tl5cv4q.png",
+	"current_km": 2000.1,
+	"licensing_expiration": "12/01/2023",
+	"daily_rental_price": 209.9,
+	"daily_fixed_km": 120,
+	"body_types": "Camionete",
+    "fuel_type": "Gasolina",
+    "engine_power": "116 cv",
+    "km_per_liter": 10.8,
+    "allowed_category_cnh": "B",
+    "differentials": "vidro e trava elétricos"
+}
+```
+
+**Response** - `json`
+
+```
+{
+
+}
+```
+
+* Deletar um carro específico
+
+|       url        |  metodo  | status |
+| :--------------: | :------: | :----: |
+| `/cars/{chassi}` | `Delete` | `200`  |
+
+**Response**
+
+```
+{
+
+}
+```

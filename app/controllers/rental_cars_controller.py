@@ -60,6 +60,9 @@ def rent_car():
         current_app.db.session.add(rental_car)
         current_app.db.session.commit()
 
+        rental_car.rental_date = rental_car.rental_date.strftime("%d/%m/%Y")
+        rental_car.rental_return_date = rental_car.rental_return_date.strftime("%d/%m/%Y")
+
         return jsonify(rental_car)
     except NotFound:
         return {'Error': 'Car or cnh not found!'}, HTTPStatus.NOT_FOUND
@@ -115,6 +118,8 @@ def return_car():
         current_app.db.session.add(car_to_be_returned)
         current_app.db.session.commit()
 
+        rental_not_returned.rental_real_return_date = rental_not_returned.rental_real_return_date.strftime("%d/%m/%Y")
+
         return jsonify(rental_not_returned), HTTPStatus.OK
 
 
@@ -158,6 +163,8 @@ def uptade_return_date():
     current_app.db.session.add(invoice)
     current_app.db.session.commit()
 
+    invoice.rental_return_date = invoice.rental_return_date.strftime("%d/%m/%Y")
+
     return jsonify(invoice), HTTPStatus.OK
 
 
@@ -173,7 +180,7 @@ def get_by_plate(plate):
         return jsonify(invoice), HTTPStatus.OK
     
     except NotFound:
-        return {'Error': 'Car not found'}, HTTPStatus.NOT_FOUND
+        return {'Error': 'Car not found or car not rented'}, HTTPStatus.NOT_FOUND
 
 def get_all_by_users(cnh):
     invoice = RentalCars.query.filter_by(customer_cnh=cnh).all()

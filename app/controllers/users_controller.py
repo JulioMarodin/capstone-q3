@@ -27,15 +27,14 @@ def create_user():
 
     address = data.pop("address")
     
-    returned_address = create_address(address)
-    
-    try:
-        user = Users(**data)
-        user.id_address = returned_address["id"]
-        
-    except TypeError as e:
-        return {'Error':'Type error bad request'}, HTTPStatus.BAD_REQUEST
+    returned_address = create_address(address, "create_user")
 
+    if type(returned_address) == tuple:
+        if returned_address[1] == 0:
+            return {"Error":f"Missing keys for address: {returned_address[0]}"}, HTTPStatus.CONFLICT
+        else:
+            return {"Error": f"Address attributes must be strings {returned_address[0]}"}, HTTPStatus.CONFLICT
+    
     missing_keys = []
 
     for attribute in attributes:
@@ -43,11 +42,18 @@ def create_user():
             missing_keys.append(attribute)
 
     if len(missing_keys) > 0:
-        return {'Error': f'Missing Keys: {missing_keys}'}, HTTPStatus.BAD_REQUEST
+        return {'Error': f'Missing Keys for user: {missing_keys}'}, HTTPStatus.BAD_REQUEST
 
     for attribute in data.items():
         if type(attribute[0]) != str:
             return {'Error': f'{attribute[0]} must be a string'}, HTTPStatus.BAD_REQUEST
+    try:
+        user = Users(**data)
+        user.id_address = returned_address["id"]
+        
+    except TypeError as e:
+        return {'Error':'Type error bad request'}, HTTPStatus.BAD_REQUEST
+
     
     try:
         
@@ -141,7 +147,7 @@ def patch_users(cnh):
             new_address["reference"] = old_address.reference
 
        
-        returned_address = create_address(new_address)
+        returned_address = create_address(new_address, "update_user")
 
         id_address = returned_address["id"]
         new_id_address ={"id_address":id_address}
@@ -154,7 +160,7 @@ def patch_users(cnh):
         old_state = States.query.filter_by(state_id = old_address.state_id).one()
         returned_address = {"state":old_state.name}
     
-    print(returned_address["state"])
+    
     
         
     for key, value in data.items():

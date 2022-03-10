@@ -11,4 +11,6 @@ def create_app():
     routes.init_app(app)
     email.init_app(app)
 
+    #gambiarrinha pra resolver o problema do heroku
+
     return app 

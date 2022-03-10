@@ -60,8 +60,8 @@ def rent_car():
         current_app.db.session.add(rental_car)
         current_app.db.session.commit()
 
-        # rental_car.rental_date = rental_car.rental_date.strftime("%m/%d/%Y")
-        # rental_car.rental_return_date = rental_car.rental_return_date.strftime("%m/%d/%Y")
+        rental_car.rental_date = rental_car.rental_date.strftime("%m/%d/%Y")
+        rental_car.rental_return_date = rental_car.rental_return_date.strftime("%m/%d/%Y")
 
         return jsonify(rental_car)
     except NotFound:

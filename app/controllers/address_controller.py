@@ -18,14 +18,32 @@ attributes = json.loads(os.getenv("ATTRIBUTES_ADDRESS"))
 
 
 
-def create_address(received_address):
+def create_address(received_address, path):
     session = current_app.db.session()
-   
     data = received_address
 
-    if "state" in data.keys():
-        state_name = data.pop("state")
-        state_id = create_state(state_name)
+    if path == "create_user":
+            missing_keys = []
+            error_keys = []
+            for attribute in attributes:
+                if attribute not in received_address.keys():
+                    missing_keys.append(attribute)
+            if len(missing_keys)>0:
+                return missing_keys, 0
+
+            for key, value in received_address.items():
+                if type(value) != str:
+                    error_keys.append(key)
+            if len(error_keys) > 0:
+                return error_keys, 1
+            state_name = data.pop("state")
+        
+            
+    elif path == "update_user":
+        if "state" in data.keys():
+            state_name = data.pop("state")
+
+    state_id = create_state(state_name)
 
     keys = ["id","street", "number", "district", "zip_code", "city", "reference", "state"]
 
@@ -80,6 +98,7 @@ def get_states():
     address_list = []
     completed_state_list = []
     states = States.query.all()
+
     for state in states:
         states_ids.append(state.state_id)
         states_list.append(state.name)
@@ -87,14 +106,18 @@ def get_states():
 
     addresses = Address.query.all()
     
+    
     for state_id in states_ids:
 
         for address in addresses:
+            
             if address.state_id == state_id:
                 address_list.append(address)
             list_address_list=[] 
             list_address_list.append(address_list)
-            response = dict(zip(states_list[state_id-1:2], list_address_list))
+            response = dict(zip(states_list[state_id-1:], list_address_list))
+            
         completed_state_list.append(response)
         address_list=[]
+    
     return jsonify(completed_state_list), HTTPStatus.OK

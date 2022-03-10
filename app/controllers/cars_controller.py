@@ -104,6 +104,18 @@ def create_car():
 
 
 def get_all_cars():
+    available = request.args.get('available')
+    if available:
+        possible_keys = ['true', 'false']
+
+        if not available in possible_keys:
+            return {'Error': 'Value passed by parameter is not allowed. Check the query params and try again'}, HTTPStatus.BAD_REQUEST
+
+
+        cars_search = Cars.query.filter_by(available=available).all()
+
+        return jsonify(cars_search), HTTPStatus.OK
+    
     session: Session = db.session
     base_query = session.query(Cars)
     record_all_cars = base_query.all()

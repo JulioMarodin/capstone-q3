@@ -558,7 +558,8 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
     "last_maintenance": "03/01/2022",
     "next_maintenance": "03/03/2022",
     "repaired_items": ["pastilha de freio", "fluido de freio", "óleo"],
-    "maintenance_price": 250.84
+    "maintenance_price": 250.84,
+	"car_license_plate": ABC1234
 }
 ```
 
@@ -577,9 +578,9 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 
 * Consultar uma manutenção
 
-|        url        | metodo | status |
-| :---------------: | :----: | :----: |
-| `/maintenance/id` | `Get`  | `200`  |
+|          url           | metodo | status |
+| :--------------------: | :----: | :----: |
+| `/maintenance/{plate}` | `Get`  | `200`  |
 
 **Response** - `json`
 

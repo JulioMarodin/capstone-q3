@@ -18,14 +18,32 @@ attributes = json.loads(os.getenv("ATTRIBUTES_ADDRESS"))
 
 
 
-def create_address(received_address):
+def create_address(received_address, path):
     session = current_app.db.session()
-   
     data = received_address
 
-    if "state" in data.keys():
-        state_name = data.pop("state")
-        state_id = create_state(state_name)
+    if path == "create_user":
+            missing_keys = []
+            error_keys = []
+            for attribute in attributes:
+                if attribute not in received_address.keys():
+                    missing_keys.append(attribute)
+            if len(missing_keys)>0:
+                return missing_keys, 0
+
+            for key, value in received_address.items():
+                if type(value) != str:
+                    error_keys.append(key)
+            if len(error_keys) > 0:
+                return error_keys, 1
+            state_name = data.pop("state")
+        
+            
+    elif path == "update_user":
+        if "state" in data.keys():
+            state_name = data.pop("state")
+
+    state_id = create_state(state_name)
 
     keys = ["id","street", "number", "district", "zip_code", "city", "reference", "state"]
 

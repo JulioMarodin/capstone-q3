@@ -7,8 +7,13 @@ from app.configs.database import db
 
 @dataclass
 class RentalCars(db.Model):
+<<<<<<< HEAD
+    create_keys = ['rental_date', 'rental_return_date', 'customer_cnh', 'car_license_plate', 'rental_total_days']
+    return_keys = ['rental_real_return_date', 'rental_real_total_days', 'total_returned_km', 'cnh', 'car_license_plate']
+=======
     create_keys = ['rental_date', 'rental_return_date', 'customer_cnh', 'car_license_plate', "rental_total_days"]
     return_keys = ['rental_real_return_date', 'rental_real_total_days', 'total_returned_km', 'car_license_plate', 'cnh']
+>>>>>>> d55ef49d0f6508053972e85fd241a877204b5ab5
 
     rental_id: str
     rental_date: date

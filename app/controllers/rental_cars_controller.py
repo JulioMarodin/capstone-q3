@@ -63,6 +63,7 @@ def rent_car():
         rental_car.rental_date = rental_car.rental_date.strftime("%d/%m/%Y")
         rental_car.rental_return_date = rental_car.rental_return_date.strftime("%d/%m/%Y")
 
+        print(jsonify(rental_car))
         return jsonify(rental_car)
     except NotFound:
         return {'Error': 'Car or cnh not found!'}, HTTPStatus.NOT_FOUND

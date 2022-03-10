@@ -5,6 +5,7 @@ from app.routes.cars_routes import bp as bp_cars
 from app.routes.address_routes import bp as bp_address
 from app.routes.maintenance_routes import bp as bp_maintenance
 from app.routes.rental_cars_routes import bp as bp_rentals
+# from app.routes.mail_route import bp as bp_mail
 
 bp_api = Blueprint('api', __name__)
 
@@ -16,5 +17,7 @@ def init_app(app: Flask):
     bp_api.register_blueprint(bp_address)
     bp_api.register_blueprint(bp_maintenance)
     bp_api.register_blueprint(bp_rentals)
+    from app.routes.mail_route import bp as bp_mail
+    bp_api.register_blueprint(bp_mail)
 
     app.register_blueprint(bp_api) 

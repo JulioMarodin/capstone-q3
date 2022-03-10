@@ -586,6 +586,7 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 
 ```
 {
+  "maintenance_id": 1,
   "last_maintenance": "03/01/2022",
   "next_maintenance": "03/03/2022",
   "repaired_items": "{\"pastilha de freio\",\"fluido de freio\",óleo}",

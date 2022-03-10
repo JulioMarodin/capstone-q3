@@ -2,7 +2,7 @@ from http import HTTPStatus
 from app.exception.missing_key import MissingKeyError
 from app.exception.invalid_date import InvalidDateError
 
-from app.services.error_treatment import filter_keys, missing_key, validate_date
+from app.services.error_treatment import filter_keys, missing_key
 from app.models.maintenance_car_models import Maintenance
 from app.models.cars_models import Cars
 from app.configs.database import db
@@ -22,11 +22,11 @@ def create_maintenance():
     try:
         maintenance = Maintenance(**data)
         
-        last_maintenance = data["last_maintenance"]
-        next_maintenance = data["next_maintenance"]
+        # last_maintenance = data["last_maintenance"]
+        # next_maintenance = data["next_maintenance"]
         filter_keys(incoming_keys, keys)
         missing_key(incoming_keys, keys)
-        validate_date(last_maintenance, next_maintenance)
+        # validate_date(last_maintenance, next_maintenance)
 
         db.session.add(maintenance)
         db.session.commit()
@@ -62,11 +62,11 @@ def update_maintenance(id):
         for key, value in data.items():
             setattr(maintenance, key, value)
 
-        last_maintenance = maintenance.last_maintenance
-        next_maintenance = maintenance.next_maintenance
+        # last_maintenance = maintenance.last_maintenance
+        # next_maintenance = maintenance.next_maintenance
     
         filter_keys(incoming_keys, keys)
-        validate_date(last_maintenance, next_maintenance)
+        # validate_date(last_maintenance, next_maintenance)
         
         db.session.add(maintenance)
         db.session.commit()
@@ -84,9 +84,9 @@ def update_maintenance(id):
 
 def get_maintenance_plate(plate):
     data = Maintenance.query.filter_by(car_license_plate=plate).all()
-    car = Cars.query.filter_by(license_plate=data.car_license_plate).one_or_none()
+    car = Cars.query.filter_by(license_plate=plate).all()
 
-    if car == None:
+    if not car:
         return {'Error': 'car not found'}, HTTPStatus.NOT_FOUND
 
     if not data:
@@ -94,8 +94,11 @@ def get_maintenance_plate(plate):
 
     format_date = Maintenance.format_date
 
-    data.last_maintenance = format_date(data.last_maintenance)
-    data.next_maintenance = format_date(data.next_maintenance)
+    for item in data:
+        item.last_maintenance = format_date(item.last_maintenance)
+        item.next_maintenance = format_date(item.next_maintenance)
+
+
 
     return jsonify(data), 200
 

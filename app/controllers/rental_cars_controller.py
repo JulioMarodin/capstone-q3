@@ -1,4 +1,5 @@
-from flask import request, jsonify, current_app
+from flask import request, jsonify, current_app, render_template
+from flask_mail import Message, Mail
 from dotenv import load_dotenv
 from http import HTTPStatus
 import os, json
@@ -63,8 +64,21 @@ def rent_car():
         rental_car.rental_date = rental_car.rental_date.strftime("%d/%m/%Y")
         rental_car.rental_return_date = rental_car.rental_return_date.strftime("%d/%m/%Y")
 
-        print(jsonify(rental_car))
+
+        def flask_mail(email):
+            mail: Mail = current_app.mail
+            msg = Message(
+                subject="Resumo de sua locação",
+                sender=os.getenv("MAIL_USERNAME"),
+                recipients=[email],
+                html=render_template("email/template.html", name=is_cnh_in_database.name, cnh=rental_car.customer_cnh, plate=rental_car.car_license_plate, rental_date=rental_car.rental_date, return_date=rental_car.rental_return_date, total_days=rental_car.rental_total_days, fixed_km=rental_car.total_fixed_km, initial_km=rental_car.initial_km)
+
+            )
+            mail.send(msg)
+        flask_mail(is_cnh_in_database.email)
+
         return jsonify(rental_car)
+
     except NotFound:
         return {'Error': 'Car or cnh not found!'}, HTTPStatus.NOT_FOUND
 
@@ -120,8 +134,18 @@ def return_car():
         current_app.db.session.commit()
 
         rental_not_returned.rental_real_return_date = rental_not_returned.rental_real_return_date.strftime("%d/%m/%Y")
-        rental_not_returned.rental_date = rental_not_returned.rental_date.strftime("%d/%m/%Y")
-        rental_not_returned.rental_return_date = rental_not_returned.rental_return_date.strftime("%d/%m/%Y")
+
+        def flask_mail(email):
+            mail: Mail = current_app.mail
+            msg = Message(
+                subject="Confirmação de devolução",
+                sender=os.getenv("MAIL_USERNAME"),
+                recipients=[email],
+                html=render_template("email/template2.html", name=is_cnh_in_database.name, cnh=rental_not_returned.customer_cnh, plate=rental_not_returned.car_license_plate, rental_date=rental_not_returned.rental_date, real_return_date=rental_not_returned.rental_real_return_date, total_days=rental_not_returned.rental_real_total_days, fixed_km=rental_not_returned.total_fixed_km, final_km=rental_not_returned.final_km, rental_real_value=rental_not_returned.rental_real_value)
+
+            )
+            mail.send(msg)
+        flask_mail(is_cnh_in_database.email)
 
         return jsonify(rental_not_returned), HTTPStatus.OK
 
@@ -167,7 +191,6 @@ def uptade_return_date():
     current_app.db.session.commit()
 
     invoice.rental_return_date = invoice.rental_return_date.strftime("%d/%m/%Y")
-    invoice.rental_date = invoice.rental_date.strftime("%d/%m/%Y")
 
     return jsonify(invoice), HTTPStatus.OK
 

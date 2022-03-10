@@ -10,7 +10,7 @@ def flask_mail():
         subject="Teste Flask",
         sender=getenv("MAIL_USERNAME"),
         recipients=["rental.cars.api@gmail.com"],
-        html=render_template("email/template.html", carro="Uno", dias=3, valor=89.90)
+        html=render_template("email/template.html", resumo="rental_cars")
     )
 
     mail.send(msg)

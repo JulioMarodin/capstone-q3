@@ -7,10 +7,16 @@
     <title>Document</title>
 </head>
 <body>
-    <h2>Resumo da locação:</h2>
-    <h3>Veículo: {{ carro }}</h3>
-    <h3>Dias alugados: {{ dias }}</h3>
-    <h3>Valor prévio: R${{ valor }}</h3>
+    <h1>Resumo da locação:</h1>
+    <h2>Olá, {{ name }}!</h2>
+    <h2>Confirmamos sua locação. Veja os detalhes abaixo:</h2>
+    <h3>CNH: {{ cnh }}</h3>
+    <h3>Placa do veículo: {{ plate }}</h3>
+    <h3>Data de locação: {{ rental_date }}</h3>
+    <h3>Previsão de retorno: {{ return_date }}</h3>
+    <h3>Total de dias alugados: {{ total_days }}</h3>
+    <h3>Quilometragem fixa: {{ fixed_km }}</h3>
+    <h3>Quilometragem inicial do veículo: {{ initial_km }}</h3>
     <p>Para maiores informações, favor entrar em contato com nossa equipe.</p>
 
 </body>

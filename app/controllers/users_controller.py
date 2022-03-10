@@ -1,4 +1,5 @@
-from flask import request, jsonify, current_app
+from flask import request, jsonify, current_app, render_template
+from flask_mail import Message, Mail
 from dotenv import load_dotenv
 from http import HTTPStatus
 import os, json

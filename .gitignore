@@ -1,8 +1,4 @@
 venv
 __pycache__
-<<<<<<< HEAD
-.env
-=======
 .env
 migrations
->>>>>>> b42893bc0733cc9567c1c2967718f9727e60d86c

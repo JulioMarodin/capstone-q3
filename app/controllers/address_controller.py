@@ -80,6 +80,7 @@ def get_states():
     address_list = []
     completed_state_list = []
     states = States.query.all()
+
     for state in states:
         states_ids.append(state.state_id)
         states_list.append(state.name)
@@ -87,14 +88,18 @@ def get_states():
 
     addresses = Address.query.all()
     
+    
     for state_id in states_ids:
 
         for address in addresses:
+            
             if address.state_id == state_id:
                 address_list.append(address)
             list_address_list=[] 
             list_address_list.append(address_list)
-            response = dict(zip(states_list[state_id-1:2], list_address_list))
+            response = dict(zip(states_list[state_id-1:], list_address_list))
+            
         completed_state_list.append(response)
         address_list=[]
+    
     return jsonify(completed_state_list), HTTPStatus.OK

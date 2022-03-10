@@ -22,17 +22,17 @@ def missing_key(incoming_keys, right_keys):
 			}
 		)
 
-def validate_date(*args):
-	data = list(args)
+# def validate_date(*args):
+# 	data = list(args)
 
-	for item in data:
-		if type(item) is str:
-			try:
-				datetime.strptime(item, '%d/%m/%Y')
+# 	for item in data:
+# 		if type(item) is str:
+# 			try:
+# 				datetime.strptime(item, '%d/%m/%Y')
 
-			except:
-				raise InvalidDateError(
-					{
-						"invalid_date": item
-					}
-				)
+# 			except:
+# 				raise InvalidDateError(
+# 					{
+# 						"invalid_date": item
+# 					}
+# 				)

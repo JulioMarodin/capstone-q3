@@ -586,7 +586,6 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 
 ```
 {
-  "maintenance_id": 1,
   "last_maintenance": "03/01/2022",
   "next_maintenance": "03/03/2022",
   "repaired_items": "{\"pastilha de freio\",\"fluido de freio\",óleo}",
@@ -648,7 +647,13 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 	"current_km": 2000.1,
 	"licensing_expiration": "12/01/2023",
 	"daily_rental_price": 209.9,
-	"daily_fixed_km": 120
+	"daily_fixed_km": 120,
+	"body_types": "Pickup",
+	"fuel_type": "gasolina",
+	"engine_power": "2.0",
+	"km_per_liter": 15.7,
+	"allowed_category_cnh": "B",
+	"differentials": "vidro elétrico, direção hidráulica"
 }
 ```
 
@@ -656,7 +661,20 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 
 ```
 {
-
+	"chassi": "2H2XA59BWDY987695",
+	"license_plate": "BRA1E31",
+	"brand": "FIAT",
+	"model": "Toro",
+	"year": "21/22",
+	"color_car": "Branca",
+	"image": "https://bali.com.br/wp-content/uploads/bfi_thumb/TORO_FREEDOM-1-70mbkij6i1c5r3hq1nri58sbhq7665gwx4j8tl5cv4q.png",
+	"current_km": 2000.1,
+	"licensing_expiration": "12/01/2023",
+	"daily_rental_price": 209.9,
+	"daily_fixed_km": 120,
+	"available": true,
+	"category_id": 1,
+	"maintenance_id": null
 }
 ```
 
@@ -671,24 +689,54 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 **Response** - `json`
 
 ```
-{
-
+[
+	{
+	"chassi": "2H2XA59BWDY987695",
+	"license_plate": "BRA1E31",
+	"brand": "FIAT",
+	"model": "Toro",
+	"year": "21/22",
+	"color_car": "Branca",
+	"image": "https://bali.com.br/wp-content/uploads/bfi_thumb/TORO_FREEDOM-1-70mbkij6i1c5r3hq1nri58sbhq7665gwx4j8tl5cv4q.png",
+	"current_km": 2000.1,
+	"licensing_expiration": "12/01/2023",
+	"daily_rental_price": 209.9,
+	"daily_fixed_km": 120,
+	"available": true,
+	"category_id": 1,
+	"maintenance_id": null
 }
+]
 ```
 
 
 * Retornar um carro específico
 
-|       url        | metodo | status |
-| :--------------: | :----: | :----: |
-| `/cars/{chassi}` | `Get`  | `200`  |
+|       url       | metodo | status |
+| :-------------: | :----: | :----: |
+| `/cars/{placa}` | `Get`  | `200`  |
 
 **Response** - `json`
 
 ```
-{
-
-}
+[
+	{
+		"chassi": "2H2XA59BWDY987695",
+		"license_plate": "BRA1E31",
+		"brand": "FIAT",
+		"model": "Toro",
+		"year": "21/22",
+		"color_car": "Branca",
+		"image": "https://bali.com.br/wp-content/uploads/bfi_thumb/TORO_FREEDOM-1-70mbkij6i1c5r3hq1nri58sbhq7665gwx4j8tl5cv4q.png",
+		"current_km": 2000.1,
+		"licensing_expiration": "12/01/2023",
+		"daily_rental_price": 209.9,
+		"daily_fixed_km": 120,
+		"available": true,
+		"category_id": 1,
+		"maintenance_id": null
+	}
+]
 ```
 
 
@@ -702,9 +750,24 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 **Response** - `json`
 
 ```
-{
-
-}
+[
+	{
+		"chassi": "2H2XA59BWDY987695",
+		"license_plate": "BRA1E31",
+		"brand": "FIAT",
+		"model": "Toro",
+		"year": "21/22",
+		"color_car": "Branca",
+		"image": "https://bali.com.br/wp-content/uploads/bfi_thumb/TORO_FREEDOM-1-70mbkij6i1c5r3hq1nri58sbhq7665gwx4j8tl5cv4q.png",
+		"current_km": 2000.1,
+		"licensing_expiration": "12/01/2023",
+		"daily_rental_price": 209.9,
+		"daily_fixed_km": 120,
+		"available": true,
+		"category_id": 1,
+		"maintenance_id": null
+	}
+]
 ```
 
 
@@ -712,7 +775,7 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 
 |       url        | metodo  | status |
 | :--------------: | :-----: | :----: |
-| `/cars/{chassi}` | `Patch` | `200`  |
+| `/cars/{chassi}` | `Patch` | `204`  |
 
 **Body** - `json`
 
@@ -737,24 +800,21 @@ Endereço será cadastrado juntamente com o corpo da requisição do cliente, ca
 }
 ```
 
-**Response** - `json`
+**Response**
 
 ```
-{
-
-}
+No body returned for response
 ```
+
 
 * Deletar um carro específico
 
 |       url        |  metodo  | status |
 | :--------------: | :------: | :----: |
-| `/cars/{chassi}` | `Delete` | `200`  |
+| `/cars/{chassi}` | `Delete` | `204`  |
 
 **Response**
 
 ```
-{
-
-}
+No body returned for response
 ```
